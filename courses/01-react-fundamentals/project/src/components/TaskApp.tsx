@@ -4,6 +4,7 @@ import TaskList from './TaskList'
 import FilterBar from './FilterBar'
 
 type Filter = 'all' | 'active' | 'completed'
+type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical'
 
 interface Task {
   id: number | string
@@ -25,8 +26,11 @@ interface TaskAppProps {
   linkToTaskDetail?: boolean
 }
 
+const PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }
+
 export default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete, showFilterBar }: TaskAppProps) {
   const [filter, setFilter] = useState<Filter>('all')
+  const [sort, setSort] = useState<SortOrder>('recently-added')
 
   function handleAddTask(task: Task) {
     setTasks(prev => [...prev, task])
@@ -52,6 +56,13 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     return true
   })
 
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
+    if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
+    if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
+    if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+    return 0 // recently-added: keep original order
+  })
+
   const computedCountText = countText
     ? countText
     : countFormat === 'completed'
@@ -63,16 +74,21 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   return (
     <div>
       {showFilterBar && (
-        <FilterBar filter={filter} onFilterChange={setFilter} />
+        <FilterBar
+          filter={filter}
+          onFilterChange={setFilter}
+          sort={sort}
+          onSortChange={setSort}
+        />
       )}
       {showForm && <TaskForm onAddTask={handleAddTask} />}
       <TaskList
-        tasks={filteredTasks}
+        tasks={sortedTasks}
         onToggle={handleToggle}
         onDelete={handleDelete}
         countText={computedCountText}
       />
-      {filteredTasks.length === 0 && (
+      {sortedTasks.length === 0 && (
         <p id="filter-empty-message">No tasks match this filter</p>
       )}
     </div>
