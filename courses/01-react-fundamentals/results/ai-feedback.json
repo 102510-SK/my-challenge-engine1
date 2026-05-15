@@ -1,28 +1,5 @@
 [
   {
-    "challengeId": "01-static-task-display",
-    "challengeName": "Static Task Display",
-    "aiReview": {
-      "challengeId": "01-static-task-display",
-      "timestamp": "2026-02-03T15:34:37.469Z",
-      "score": 88,
-      "feedback": [],
-      "strengths": [
-        "The code is well-structured and follows a consistent naming convention.",
-        "The use of TypeScript interfaces and types is excellent for maintaining code quality and preventing type-related errors.",
-        "The code is modular and easy to understand, with each component having a single responsibility."
-      ],
-      "improvements": [
-        "Some of the variable names could be more descriptive. For example, `taskId` could be renamed to `taskIdentifier` to better convey its purpose.",
-        "The `TaskCard` component has a conditional rendering of the checkbox input. This could be refactored to make it more concise and easier to understand.",
-        "The `TaskList` component has a lot of props that are not being used. These could be removed to declutter the code and make it easier to understand."
-      ],
-      "readability": 85,
-      "maintainability": 90,
-      "overall": "The code is well-structured, maintainable, and follows good coding practices. However, there are some minor improvements that could be made to make it even better."
-    }
-  },
-  {
     "challengeId": "02-dynamic-task-rendering",
     "challengeName": "Dynamic Task Rendering",
     "aiReview": {
@@ -43,6 +20,38 @@
       "readability": 85,
       "maintainability": 80,
       "overall": "The code is well-structured and follows good practices, but there are some areas that need improvement. With some updates to the `TaskCard` and `TaskList` components, the code will be more robust and maintainable."
+    }
+  },
+  {
+    "challengeId": "01-static-task-display",
+    "challengeName": "Static Task Display",
+    "aiReview": {
+      "challengeId": "01-static-task-display",
+      "timestamp": "2026-05-15T01:42:46.542Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
+  },
+  {
+    "challengeId": "03-adding-new-tasks",
+    "challengeName": "Adding New Tasks",
+    "aiReview": {
+      "challengeId": "03-adding-new-tasks",
+      "timestamp": "2026-05-15T02:15:55.670Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
   }
 ]
