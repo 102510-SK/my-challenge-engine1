@@ -1,7 +1,7 @@
 interface TaskCardProps {
   title: string
   description: string
-  priority: 'Low' | 'Medium' | 'High'
+  priority: string
 }
 
 export default function TaskCard({ title, description, priority }: TaskCardProps) {
