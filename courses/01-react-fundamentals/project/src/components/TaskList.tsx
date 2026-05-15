@@ -15,10 +15,11 @@ interface TaskListProps {
   onUpdateTask?: (id: number | string, updates: Partial<Task>) => void
   editingId?: number | string | null
   setEditingId?: React.Dispatch<React.SetStateAction<number | string | null>>
+  countFormat?: string
+  countText?: string
 }
 
-export default function TaskList({ tasks }: TaskListProps) {
-  // Challenge 01: show hardcoded tasks if no tasks prop passed
+export default function TaskList({ tasks, onToggle, onDelete, countFormat, countText }: TaskListProps) {
   if (!tasks) {
     return (
       <section id="task-list">
@@ -29,14 +30,27 @@ export default function TaskList({ tasks }: TaskListProps) {
     )
   }
 
+  const completedCount = tasks.filter(t => t.completed).length
+
+  const countDisplay = countText
+    ? countText
+    : countFormat === 'tasks'
+    ? `Tasks: ${tasks.length}`
+    : `${completedCount} of ${tasks.length} completed`
+
   return (
     <section id="task-list">
+      <div id="task-count">{countDisplay}</div>
       {tasks.map(task => (
         <TaskCard
           key={task.id}
+          id={task.id}
           title={task.title}
           description={task.description}
           priority={task.priority}
+          completed={task.completed}
+          onToggle={onToggle ? () => onToggle(task.id) : undefined}
+          onDelete={onDelete}
         />
       ))}
     </section>

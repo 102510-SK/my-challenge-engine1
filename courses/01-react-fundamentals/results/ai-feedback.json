@@ -53,5 +53,37 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "04-task-completion-toggle",
+    "challengeName": "Task Completion Toggle",
+    "aiReview": {
+      "challengeId": "04-task-completion-toggle",
+      "timestamp": "2026-05-15T07:49:41.492Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
+  },
+  {
+    "challengeId": "05-task-deletion",
+    "challengeName": "Task Deletion",
+    "aiReview": {
+      "challengeId": "05-task-deletion",
+      "timestamp": "2026-05-15T08:19:00.853Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]

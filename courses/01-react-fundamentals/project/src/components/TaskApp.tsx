@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import TaskForm from './TaskForm'
 import TaskList from './TaskList'
 
@@ -15,15 +14,14 @@ interface TaskAppProps {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
   showForm?: boolean
   countFormat?: string
+  countText?: string
   onDelete?: (id: number | string) => void
   showFilterBar?: boolean
   showStatsPanel?: boolean
   linkToTaskDetail?: boolean
 }
 
-export default function TaskApp({ tasks, setTasks, showForm }: TaskAppProps) {
-  const [editingId, setEditingId] = useState<number | string | null>(null)
-
+export default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete }: TaskAppProps) {
   function handleAddTask(task: Task) {
     setTasks(prev => [...prev, task])
   }
@@ -35,27 +33,22 @@ export default function TaskApp({ tasks, setTasks, showForm }: TaskAppProps) {
   }
 
   function handleDelete(id: number | string) {
-    setTasks(prev => prev.filter(t => t.id !== id))
-  }
-
-  function handleUpdateTask(id: number | string, updates: Partial<Task>) {
-    setTasks(prev =>
-      prev.map(t => t.id === id ? { ...t, ...updates } : t)
-    )
-    setEditingId(null)
+    if (onDelete) {
+      onDelete(id)
+    } else {
+      setTasks(prev => prev.filter(t => t.id !== id))
+    }
   }
 
   return (
     <div>
-      <div id="task-count">Tasks: {tasks.length}</div>
       {showForm && <TaskForm onAddTask={handleAddTask} />}
       <TaskList
         tasks={tasks}
         onToggle={handleToggle}
         onDelete={handleDelete}
-        onUpdateTask={handleUpdateTask}
-        editingId={editingId}
-        setEditingId={setEditingId}
+        countFormat={countFormat}
+        countText={countText}
       />
     </div>
   )
