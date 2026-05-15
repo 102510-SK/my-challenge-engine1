@@ -1,0 +1,18 @@
+{
+  "challengeId": "21-react-router",
+  "challengeName": "React Router - Routing and Navigation",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-2.5 hours",
+  "skills": ["React Router", "Route", "Link", "useNavigate", "useParams", "URL-driven UI", "Dynamic segments"],
+  "filesToCheck": [
+    "src/components/TaskDetailPage.tsx",
+    "src/App.tsx",
+    "src/components/TaskApp.tsx",
+    "src/components/TaskList.tsx",
+    "src/components/TaskCard.tsx"
+  ],
+  "patternsRequired": [
+    "functionalComponent",
+    "props"
+  ]
+}

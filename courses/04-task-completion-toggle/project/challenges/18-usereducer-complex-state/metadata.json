@@ -1,0 +1,13 @@
+{
+  "challengeId": "18-usereducer-complex-state",
+  "challengeName": "useReducer - Complex State Management",
+  "difficulty": "intermediate",
+  "estimatedTime": "4-4.5 hours",
+  "skills": ["useReducer", "Reducer functions", "Action objects", "Dispatch pattern", "Complex state logic"],
+  "filesToCheck": [
+    "src/App.tsx",
+    "src/reducers/taskReducer.ts",
+    "src/components/TaskApp.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "useReducer"]
+}

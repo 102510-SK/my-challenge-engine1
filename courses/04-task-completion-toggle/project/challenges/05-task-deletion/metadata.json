@@ -1,0 +1,14 @@
+{
+  "challengeId": "05-task-deletion",
+  "challengeName": "Task Deletion",
+  "difficulty": "beginner",
+  "estimatedTime": "1-1.5 hours",
+  "skills": ["filter", "Immutable state", "Confirmation patterns", "Prop functions with arguments"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskList.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

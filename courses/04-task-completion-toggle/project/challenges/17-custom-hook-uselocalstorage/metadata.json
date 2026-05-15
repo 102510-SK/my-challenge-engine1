@@ -1,0 +1,13 @@
+{
+  "challengeId": "17-custom-hook-uselocalstorage",
+  "challengeName": "Custom Hook - useLocalStorage",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-2.5 hours",
+  "skills": ["Custom hooks", "Hook composition", "Reusable logic", "localStorage abstraction"],
+  "filesToCheck": [
+    "src/hooks/useLocalStorage.ts",
+    "src/App.tsx",
+    "src/contexts/ThemeContext.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "customHook"]
+}

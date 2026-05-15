@@ -1,0 +1,14 @@
+{
+  "challengeId": "15-component-organization",
+  "challengeName": "Component Organization with Props",
+  "difficulty": "intermediate",
+  "estimatedTime": "2.5-3 hours",
+  "skills": ["Component extraction", "Props interface design", "Single Responsibility", "Reusability", "Props destructuring"],
+  "filesToCheck": [
+    "src/components/Button.tsx",
+    "src/components/Badge.tsx",
+    "src/components/StatusIndicator.tsx",
+    "src/components/FormInput.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

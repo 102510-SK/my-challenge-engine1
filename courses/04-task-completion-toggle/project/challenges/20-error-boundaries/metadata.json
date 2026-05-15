@@ -1,0 +1,13 @@
+{
+  "challengeId": "20-error-boundaries",
+  "challengeName": "Error Boundaries and Error Handling",
+  "difficulty": "intermediate",
+  "estimatedTime": "3-3.5 hours",
+  "skills": ["Error boundaries", "Class component", "Error handling", "Fallback UI", "try-catch"],
+  "filesToCheck": [
+    "src/components/ErrorBoundary.tsx",
+    "src/components/TaskApp.tsx",
+    "src/hooks/useLocalStorage.ts"
+  ],
+  "patternsRequired": ["functionalComponent"]
+}

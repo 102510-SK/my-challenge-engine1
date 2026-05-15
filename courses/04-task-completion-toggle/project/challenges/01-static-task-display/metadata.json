@@ -1,0 +1,16 @@
+{
+  "challengeId": "01-static-task-display",
+  "challengeName": "Static Task Display",
+  "difficulty": "beginner",
+  "estimatedTime": "1.5-2 hours",
+  "skills": ["JSX", "Functional components", "Props", "Component composition", "Semantic HTML"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskList.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": [
+    "functionalComponent",
+    "props"
+  ]
+}

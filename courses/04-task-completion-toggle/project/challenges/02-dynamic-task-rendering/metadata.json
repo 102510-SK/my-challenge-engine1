@@ -1,0 +1,18 @@
+{
+  "challengeId": "02-dynamic-task-rendering",
+  "challengeName": "Dynamic Task Rendering",
+  "difficulty": "beginner",
+  "estimatedTime": "1.5-2 hours",
+  "skills": ["useState", "map()", "key prop", "Lists in JSX"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskList.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": [
+    "functionalComponent",
+    "props",
+    "useState",
+    "arrayMethods"
+  ]
+}

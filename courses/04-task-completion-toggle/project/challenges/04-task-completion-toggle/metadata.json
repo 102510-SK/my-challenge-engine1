@@ -1,0 +1,18 @@
+{
+  "challengeId": "04-task-completion-toggle",
+  "challengeName": "Task Completion Toggle",
+  "difficulty": "intermediate",
+  "estimatedTime": "1.5-2 hours",
+  "skills": ["Updating array state", "Event handlers with params", "Conditional styling"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskList.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": [
+    "functionalComponent",
+    "props",
+    "useState",
+    "arrayMethods"
+  ]
+}

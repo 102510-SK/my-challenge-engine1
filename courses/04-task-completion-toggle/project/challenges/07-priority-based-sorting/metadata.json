@@ -1,0 +1,13 @@
+{
+  "challengeId": "07-priority-based-sorting",
+  "challengeName": "Priority-Based Sorting",
+  "difficulty": "intermediate",
+  "estimatedTime": "1.5-2 hours",
+  "skills": ["Array sort", "Sort stability", "Multiple sort criteria", "Select dropdowns"],
+  "filesToCheck": [
+    "src/components/FilterBar.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

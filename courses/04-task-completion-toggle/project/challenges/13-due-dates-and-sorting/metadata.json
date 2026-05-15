@@ -1,0 +1,13 @@
+{
+  "challengeId": "13-due-dates-and-sorting",
+  "challengeName": "Due Dates and Sorting",
+  "difficulty": "intermediate",
+  "estimatedTime": "2.5-3 hours",
+  "skills": ["Date handling", "Date objects and formatting", "Date comparison", "Overdue detection"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskForm.tsx",
+    "src/components/TaskApp.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

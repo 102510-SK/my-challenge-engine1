@@ -1,0 +1,12 @@
+{
+  "challengeId": "14-task-statistics-dashboard",
+  "challengeName": "Task Statistics Dashboard",
+  "difficulty": "intermediate",
+  "estimatedTime": "3-3.5 hours",
+  "skills": ["Computed statistics", "useMemo", "Performance optimization", "Data aggregation"],
+  "filesToCheck": [
+    "src/components/StatsPanel.tsx",
+    "src/components/TaskApp.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "useMemo", "props"]
+}

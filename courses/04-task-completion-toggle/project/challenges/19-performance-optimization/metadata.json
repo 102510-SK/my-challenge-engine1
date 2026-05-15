@@ -1,0 +1,14 @@
+{
+  "challengeId": "19-performance-optimization",
+  "challengeName": "Performance Optimization",
+  "difficulty": "intermediate",
+  "estimatedTime": "3-3.5 hours",
+  "skills": ["React.memo", "useCallback", "useMemo", "Re-render optimization"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskList.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "React.memo", "useCallback", "useMemo"]
+}

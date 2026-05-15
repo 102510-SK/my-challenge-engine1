@@ -1,0 +1,11 @@
+{
+  "challengeId": "10-useeffect-local-storage",
+  "challengeName": "useEffect - Local Storage Persistence",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-3 hours",
+  "skills": ["useEffect", "Side effects", "localStorage", "JSON serialization", "Effect dependencies"],
+  "filesToCheck": [
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "useEffect"]
+}

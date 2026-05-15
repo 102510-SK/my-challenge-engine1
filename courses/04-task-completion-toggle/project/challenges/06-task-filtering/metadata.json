@@ -1,0 +1,13 @@
+{
+  "challengeId": "06-task-filtering",
+  "challengeName": "Task Filtering",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-2.5 hours",
+  "skills": ["Derived state", "Conditional rendering", "Filter logic composition"],
+  "filesToCheck": [
+    "src/components/FilterBar.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

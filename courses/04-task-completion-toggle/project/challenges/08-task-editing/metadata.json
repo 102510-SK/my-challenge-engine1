@@ -1,0 +1,14 @@
+{
+  "challengeId": "08-task-editing",
+  "challengeName": "Task Editing",
+  "difficulty": "intermediate",
+  "estimatedTime": "3-3.5 hours",
+  "skills": ["Inline editing", "Conditional rendering", "Edit mode state", "Controlled inputs", "Form handling", "State synchronization"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskList.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

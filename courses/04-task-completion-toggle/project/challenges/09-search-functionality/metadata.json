@@ -1,0 +1,13 @@
+{
+  "challengeId": "09-search-functionality",
+  "challengeName": "Search Functionality",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-2.5 hours",
+  "skills": ["Text search", "Combining filters", "String methods", "Search UI patterns"],
+  "filesToCheck": [
+    "src/components/FilterBar.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}

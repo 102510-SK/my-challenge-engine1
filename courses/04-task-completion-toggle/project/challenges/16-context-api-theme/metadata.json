@@ -1,0 +1,13 @@
+{
+  "challengeId": "16-context-api-theme",
+  "challengeName": "Context API - Theme Management",
+  "difficulty": "intermediate",
+  "estimatedTime": "3-3.5 hours",
+  "skills": ["React Context", "createContext", "Provider", "useContext", "Global state", "Custom hook"],
+  "filesToCheck": [
+    "src/contexts/ThemeContext.tsx",
+    "src/App.tsx",
+    "src/components/ChallengeList.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "createContext", "useContext"]
+}

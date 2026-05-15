@@ -1,0 +1,13 @@
+{
+  "challengeId": "11-useeffect-debounced-search",
+  "challengeName": "useEffect - Debounced Search",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-2.5 hours",
+  "skills": ["useEffect cleanup", "setTimeout", "Debouncing", "Memory leak prevention"],
+  "filesToCheck": [
+    "src/components/FilterBar.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "useEffect"]
+}

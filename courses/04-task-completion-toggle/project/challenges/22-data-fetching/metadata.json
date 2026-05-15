@@ -1,0 +1,15 @@
+{
+  "challengeId": "22-data-fetching",
+  "challengeName": "Data Fetching - Loading and Error State",
+  "difficulty": "intermediate",
+  "estimatedTime": "2-3 hours",
+  "skills": ["fetch", "useEffect", "Loading state", "Error state", "Async data", "Conditional rendering"],
+  "filesToCheck": [
+    "src/components/FetchDemoView.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": [
+    "functionalComponent",
+    "useState"
+  ]
+}

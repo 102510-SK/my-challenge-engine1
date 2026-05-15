@@ -1,0 +1,17 @@
+{
+  "challengeId": "23-useref-focus-management",
+  "challengeName": "useRef - Focus Management",
+  "difficulty": "beginner",
+  "estimatedTime": "1.5-2 hours",
+  "skills": ["useRef", "ref.current", "Focus management", "DOM access", "useEffect with ref"],
+  "filesToCheck": [
+    "src/components/FilterBar.tsx",
+    "src/components/TaskApp.tsx",
+    "src/App.tsx"
+  ],
+  "patternsRequired": [
+    "functionalComponent",
+    "props",
+    "useRef"
+  ]
+}

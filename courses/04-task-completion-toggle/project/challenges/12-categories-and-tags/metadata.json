@@ -1,0 +1,14 @@
+{
+  "challengeId": "12-categories-and-tags",
+  "challengeName": "Categories and Tags",
+  "difficulty": "intermediate",
+  "estimatedTime": "3-3.5 hours",
+  "skills": ["Complex state", "Array fields", "Multi-select/tags input", "Nested data", "Filtering by array membership"],
+  "filesToCheck": [
+    "src/components/TaskCard.tsx",
+    "src/components/TaskForm.tsx",
+    "src/components/FilterBar.tsx",
+    "src/components/TaskList.tsx"
+  ],
+  "patternsRequired": ["functionalComponent", "props"]
+}
