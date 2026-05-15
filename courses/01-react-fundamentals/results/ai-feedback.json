@@ -85,5 +85,21 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "06-task-filtering",
+    "challengeName": "Task Filtering",
+    "aiReview": {
+      "challengeId": "06-task-filtering",
+      "timestamp": "2026-05-15T08:26:42.590Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]
