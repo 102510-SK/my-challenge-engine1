@@ -19,7 +19,7 @@ interface TaskListProps {
   countText?: string
 }
 
-export default function TaskList({ tasks, onToggle, onDelete, countFormat, countText }: TaskListProps) {
+export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, editingId, setEditingId, countFormat, countText }: TaskListProps) {
   if (!tasks) {
     return (
       <section id="task-list">
@@ -51,6 +51,10 @@ export default function TaskList({ tasks, onToggle, onDelete, countFormat, count
           completed={task.completed}
           onToggle={onToggle ? () => onToggle(task.id) : undefined}
           onDelete={onDelete}
+          onUpdateTask={onUpdateTask}
+          isEditing={editingId === task.id}
+          onEditStart={setEditingId ? () => setEditingId(task.id) : undefined}
+          onEditCancel={setEditingId ? () => setEditingId(null) : undefined}
         />
       ))}
     </section>

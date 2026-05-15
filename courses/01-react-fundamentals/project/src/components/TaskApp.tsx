@@ -31,6 +31,7 @@ const PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }
 export default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete, showFilterBar }: TaskAppProps) {
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<SortOrder>('recently-added')
+  const [editingId, setEditingId] = useState<number | string | null>(null)
 
   function handleAddTask(task: Task) {
     setTasks(prev => [...prev, task])
@@ -50,6 +51,13 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     }
   }
 
+  function handleUpdateTask(id: number | string, updates: Partial<Task>) {
+    setTasks(prev =>
+      prev.map(t => t.id === id ? { ...t, ...updates } : t)
+    )
+    setEditingId(null)
+  }
+
   const filteredTasks = tasks.filter(t => {
     if (filter === 'active') return !t.completed
     if (filter === 'completed') return t.completed
@@ -60,7 +68,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
     if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
     if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
-    return 0 // recently-added: keep original order
+    return 0
   })
 
   const computedCountText = countText
@@ -74,18 +82,16 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   return (
     <div>
       {showFilterBar && (
-        <FilterBar
-          filter={filter}
-          onFilterChange={setFilter}
-          sort={sort}
-          onSortChange={setSort}
-        />
+        <FilterBar filter={filter} onFilterChange={setFilter} sort={sort} onSortChange={setSort} />
       )}
       {showForm && <TaskForm onAddTask={handleAddTask} />}
       <TaskList
         tasks={sortedTasks}
         onToggle={handleToggle}
         onDelete={handleDelete}
+        onUpdateTask={handleUpdateTask}
+        editingId={editingId}
+        setEditingId={setEditingId}
         countText={computedCountText}
       />
       {sortedTasks.length === 0 && (
