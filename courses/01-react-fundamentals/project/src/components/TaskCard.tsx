@@ -1,16 +1,15 @@
 interface TaskCardProps {
   title: string
   description: string
-  priority: string
-  completed?: boolean
-  onToggle?: (id: string | number) => void
-  taskId?: string | number
+  priority: 'Low' | 'Medium' | 'High'
 }
 
-export default function TaskCard(_props: TaskCardProps) {
+export default function TaskCard({ title, description, priority }: TaskCardProps) {
   return (
     <article id="task-card">
-      <p>Implement: display title, description, and priority from props</p>
+      <h2>{title}</h2>
+      <p>{description}</p>
+      <span>Priority: {priority}</span>
     </article>
   )
 }
