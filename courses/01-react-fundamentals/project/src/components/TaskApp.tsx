@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import TaskForm from './TaskForm'
 import TaskList from './TaskList'
 import FilterBar from './FilterBar'
+import StatsPanel from './StatsPanel'
 
 type Filter = 'all' | 'active' | 'completed'
 type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'
@@ -31,7 +32,7 @@ interface TaskAppProps {
 
 const PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }
 
-export default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete, showFilterBar }: TaskAppProps) {
+export default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<SortOrder>('recently-added')
   const [editingId, setEditingId] = useState<number | string | null>(null)
@@ -93,6 +94,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
 
   return (
     <div>
+      {showStatsPanel && <StatsPanel tasks={tasks} />}
       {showFilterBar && (
         <FilterBar
           filter={filter} onFilterChange={setFilter}

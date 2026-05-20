@@ -5234,5 +5234,303 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "14-task-statistics-dashboard",
+    "challengeName": "Task Statistics Dashboard",
+    "timestamp": "2026-05-20T05:29:52.338Z",
+    "scores": {
+      "functionalTests": 100,
+      "codeQuality": 98,
+      "architecture": 100,
+      "bestPractices": 100,
+      "e2eTests": 100,
+      "aiReview": 0
+    },
+    "totalScore": 84.7,
+    "passed": true,
+    "errors": [],
+    "warnings": [],
+    "testResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 3,
+      "passedTests": 3,
+      "failedTests": 0,
+      "details": [
+        {
+          "assertionResults": [
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 14: Task Statistics Dashboard"
+              ],
+              "fullName": " Challenge 14: Task Statistics Dashboard StatsPanel should have id=\"stats-panel\"",
+              "status": "passed",
+              "title": "StatsPanel should have id=\"stats-panel\"",
+              "duration": 82,
+              "failureMessages": []
+            },
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 14: Task Statistics Dashboard"
+              ],
+              "fullName": " Challenge 14: Task Statistics Dashboard StatsPanel should display total and completed",
+              "status": "passed",
+              "title": "StatsPanel should display total and completed",
+              "duration": 32,
+              "failureMessages": []
+            },
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 14: Task Statistics Dashboard"
+              ],
+              "fullName": " Challenge 14: Task Statistics Dashboard TaskList should render tasks",
+              "status": "passed",
+              "title": "TaskList should render tasks",
+              "duration": 15,
+              "failureMessages": []
+            }
+          ],
+          "startTime": 1779254997746,
+          "endTime": 1779254997875,
+          "status": "passed",
+          "message": "",
+          "name": "C:/Users/HP/OneDrive/Documents/challenge-engine-react/courses/01-react-fundamentals/project/tests/challenge-14.test.tsx"
+        }
+      ]
+    },
+    "lintResults": {
+      "score": 98,
+      "passed": true,
+      "totalIssues": 1,
+      "errors": 0,
+      "warnings": 1,
+      "details": [
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\StatsPanel.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\TaskApp.tsx",
+          "messages": [
+            {
+              "ruleId": "react-hooks/exhaustive-deps",
+              "severity": 1,
+              "message": "React Hook useEffect has a missing dependency: 'debouncedSearch'. Either include it or remove the dependency array.",
+              "line": 48,
+              "column": 6,
+              "nodeType": "ArrayExpression",
+              "endLine": 48,
+              "endColumn": 14,
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [debouncedSearch, search]",
+                  "fix": {
+                    "range": [
+                      1705,
+                      1713
+                    ],
+                    "text": "[debouncedSearch, search]"
+                  }
+                }
+              ]
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 1,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import { useState, useEffect } from 'react'\r\nimport TaskForm from './TaskForm'\r\nimport TaskList from './TaskList'\r\nimport FilterBar from './FilterBar'\r\nimport StatsPanel from './StatsPanel'\r\n\r\ntype Filter = 'all' | 'active' | 'completed'\r\ntype SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'\r\n\r\ninterface Task {\r\n  id: number | string\r\n  title: string\r\n  description: string\r\n  priority: string\r\n  completed: boolean\r\n  category?: string\r\n  tags?: string[]\r\n  dueDate?: string\r\n}\r\n\r\ninterface TaskAppProps {\r\n  tasks: Task[]\r\n  setTasks: React.Dispatch<React.SetStateAction<Task[]>>\r\n  showForm?: boolean\r\n  countFormat?: string\r\n  countText?: string\r\n  onDelete?: (id: number | string) => void\r\n  showFilterBar?: boolean\r\n  showStatsPanel?: boolean\r\n  linkToTaskDetail?: boolean\r\n}\r\n\r\nconst PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }\r\n\r\nexport default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {\r\n  const [filter, setFilter] = useState<Filter>('all')\r\n  const [sort, setSort] = useState<SortOrder>('recently-added')\r\n  const [editingId, setEditingId] = useState<number | string | null>(null)\r\n  const [search, setSearch] = useState('')\r\n  const [debouncedSearch, setDebouncedSearch] = useState('')\r\n  const [searching, setSearching] = useState(false)\r\n  const [selectedCategory, setSelectedCategory] = useState('')\r\n\r\n  useEffect(() => {\r\n    if (search !== debouncedSearch) setSearching(true)\r\n    const timeout = setTimeout(() => { setDebouncedSearch(search); setSearching(false) }, 300)\r\n    return () => clearTimeout(timeout)\r\n  }, [search])\r\n\r\n  function handleAddTask(task: Task) { setTasks(prev => [...prev, task]) }\r\n\r\n  function handleToggle(id: number | string) {\r\n    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))\r\n  }\r\n\r\n  function handleDelete(id: number | string) {\r\n    if (onDelete) { onDelete(id) } else { setTasks(prev => prev.filter(t => t.id !== id)) }\r\n  }\r\n\r\n  function handleUpdateTask(id: number | string, updates: Partial<Task>) {\r\n    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))\r\n    setEditingId(null)\r\n  }\r\n\r\n  const categories = [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[]\r\n\r\n  const filteredTasks = tasks\r\n    .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })\r\n    .filter(t => !selectedCategory || t.category === selectedCategory)\r\n    .filter(t => {\r\n      if (!debouncedSearch.trim()) return true\r\n      const q = debouncedSearch.toLowerCase()\r\n      return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)\r\n    })\r\n\r\n  const sortedTasks = [...filteredTasks].sort((a, b) => {\r\n    if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)\r\n    if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)\r\n    if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())\r\n    if (sort === 'due-date') {\r\n      if (!a.dueDate && !b.dueDate) return 0\r\n      if (!a.dueDate) return 1\r\n      if (!b.dueDate) return -1\r\n      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()\r\n    }\r\n    return 0\r\n  })\r\n\r\n  const computedCountText = countText\r\n    ? countText\r\n    : countFormat === 'completed'\r\n    ? `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`\r\n    : `Showing ${sortedTasks.length} of ${tasks.length} tasks`\r\n\r\n  return (\r\n    <div>\r\n      {showStatsPanel && <StatsPanel tasks={tasks} />}\r\n      {showFilterBar && (\r\n        <FilterBar\r\n          filter={filter} onFilterChange={setFilter}\r\n          sort={sort} onSortChange={setSort}\r\n          search={search} onSearchChange={setSearch}\r\n          onClearSearch={() => { setSearch(''); setDebouncedSearch('') }}\r\n          categories={categories} selectedCategory={selectedCategory}\r\n          onCategoryChange={setSelectedCategory}\r\n        />\r\n      )}\r\n      {searching && <p id=\"searching-indicator\">Searching...</p>}\r\n      {showForm && <TaskForm onAddTask={handleAddTask} categories={categories} />}\r\n      <TaskList\r\n        tasks={sortedTasks}\r\n        onToggle={handleToggle}\r\n        onDelete={handleDelete}\r\n        onUpdateTask={handleUpdateTask}\r\n        editingId={editingId}\r\n        setEditingId={setEditingId}\r\n        countText={computedCountText}\r\n      />\r\n      {sortedTasks.length === 0 && !searching && (\r\n        <p id=\"filter-empty-message\">\r\n          {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}\r\n        </p>\r\n      )}\r\n    </div>\r\n  )\r\n}",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        }
+      ]
+    },
+    "architectureResults": {
+      "score": 100,
+      "passed": true,
+      "patternsFound": [
+        "functionalComponent",
+        "useMemo",
+        "props"
+      ],
+      "patternsMissing": [],
+      "details": [
+        {
+          "file": "src/components/StatsPanel.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "useMemo",
+            "props"
+          ],
+          "patternsMissing": []
+        },
+        {
+          "file": "src/components/TaskApp.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "props"
+          ],
+          "patternsMissing": [
+            "useMemo"
+          ]
+        }
+      ]
+    },
+    "bestPracticesResults": {
+      "score": 100,
+      "passed": true,
+      "issues": [],
+      "details": [],
+      "note": "No best practices requirements specified in challenge"
+    },
+    "e2eResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 2,
+      "passedTests": 2,
+      "failedTests": 0,
+      "details": [
+        {
+          "title": "challenge-14.spec.ts",
+          "file": "challenge-14.spec.ts",
+          "column": 0,
+          "line": 0,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Challenge 14: Task Statistics Dashboard - E2E",
+              "file": "challenge-14.spec.ts",
+              "line": 3,
+              "column": 6,
+              "specs": [
+                {
+                  "title": "should display task list",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1092,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-05-20T05:30:13.260Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "be2334d46d68155f57f3-364480833597fd92a242",
+                  "file": "challenge-14.spec.ts",
+                  "line": 8,
+                  "column": 3
+                },
+                {
+                  "title": "should display stats panel when implemented",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 757,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-05-20T05:30:14.751Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "be2334d46d68155f57f3-3e6d44d38890e704d251",
+                  "file": "challenge-14.spec.ts",
+                  "line": 12,
+                  "column": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "screenshots": []
+    },
+    "aiReviewResults": {
+      "challengeId": "14-task-statistics-dashboard",
+      "timestamp": "2026-05-20T05:30:16.235Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    },
+    "aiResults": {
+      "challengeId": "14-task-statistics-dashboard",
+      "timestamp": "2026-05-20T05:30:16.235Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]
