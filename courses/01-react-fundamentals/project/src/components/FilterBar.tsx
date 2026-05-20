@@ -9,9 +9,16 @@ interface FilterBarProps {
   search?: string
   onSearchChange?: (search: string) => void
   onClearSearch?: () => void
+  categories?: string[]
+  selectedCategory?: string
+  onCategoryChange?: (category: string) => void
 }
 
-export default function FilterBar({ filter, onFilterChange, sort, onSortChange, search, onSearchChange, onClearSearch }: FilterBarProps) {
+export default function FilterBar({
+  filter, onFilterChange, sort, onSortChange,
+  search, onSearchChange, onClearSearch,
+  categories, selectedCategory, onCategoryChange
+}: FilterBarProps) {
   return (
     <div id="filter-bar">
       <button data-active={filter === 'all'} onClick={() => onFilterChange?.('all')}>All</button>
@@ -23,6 +30,12 @@ export default function FilterBar({ filter, onFilterChange, sort, onSortChange, 
           <option value="priority-high-low">Priority: High to Low</option>
           <option value="priority-low-high">Priority: Low to High</option>
           <option value="alphabetical">Alphabetical</option>
+        </select>
+      )}
+      {onCategoryChange && (
+        <select id="category-filter" value={selectedCategory} onChange={e => onCategoryChange(e.target.value)}>
+          <option value="">All categories</option>
+          {categories?.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       )}
       {onSearchChange && (

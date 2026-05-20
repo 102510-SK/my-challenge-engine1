@@ -181,5 +181,21 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "12-categories-and-tags",
+    "challengeName": "Categories and Tags",
+    "aiReview": {
+      "challengeId": "12-categories-and-tags",
+      "timestamp": "2026-05-20T05:11:45.054Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]

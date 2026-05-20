@@ -12,6 +12,8 @@ interface Task {
   description: string
   priority: string
   completed: boolean
+  category?: string
+  tags?: string[]
 }
 
 interface TaskAppProps {
@@ -35,11 +37,10 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [searching, setSearching] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState('')
 
   useEffect(() => {
-    if (search !== debouncedSearch) {
-      setSearching(true)
-    }
+    if (search !== debouncedSearch) setSearching(true)
     const timeout = setTimeout(() => {
       setDebouncedSearch(search)
       setSearching(false)
@@ -52,9 +53,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   }
 
   function handleToggle(id: number | string) {
-    setTasks(prev =>
-      prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t)
-    )
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
   }
 
   function handleDelete(id: number | string) {
@@ -66,25 +65,26 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   }
 
   function handleUpdateTask(id: number | string, updates: Partial<Task>) {
-    setTasks(prev =>
-      prev.map(t => t.id === id ? { ...t, ...updates } : t)
-    )
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))
     setEditingId(null)
   }
 
-  const filteredTasks = tasks.filter(t => {
-    if (filter === 'active') return !t.completed
-    if (filter === 'completed') return t.completed
-    return true
-  })
+  const categories = [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[]
 
-  const searchedTasks = filteredTasks.filter(t => {
-    if (!debouncedSearch.trim()) return true
-    const q = debouncedSearch.toLowerCase()
-    return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
-  })
+  const filteredTasks = tasks
+    .filter(t => {
+      if (filter === 'active') return !t.completed
+      if (filter === 'completed') return t.completed
+      return true
+    })
+    .filter(t => !selectedCategory || t.category === selectedCategory)
+    .filter(t => {
+      if (!debouncedSearch.trim()) return true
+      const q = debouncedSearch.toLowerCase()
+      return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+    })
 
-  const sortedTasks = [...searchedTasks].sort((a, b) => {
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
     if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
     if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
     if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
@@ -108,10 +108,13 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
           search={search}
           onSearchChange={setSearch}
           onClearSearch={() => { setSearch(''); setDebouncedSearch('') }}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
         />
       )}
       {searching && <p id="searching-indicator">Searching...</p>}
-      {showForm && <TaskForm onAddTask={handleAddTask} />}
+      {showForm && <TaskForm onAddTask={handleAddTask} categories={categories} />}
       <TaskList
         tasks={sortedTasks}
         onToggle={handleToggle}

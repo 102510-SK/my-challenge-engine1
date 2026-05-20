@@ -6,6 +6,8 @@ export interface Task {
   description: string
   priority: string
   completed: boolean
+  category?: string
+  tags?: string[]
 }
 
 interface TaskListProps {
@@ -31,7 +33,6 @@ export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, edit
   }
 
   const completedCount = tasks.filter(t => t.completed).length
-
   const countDisplay = countText
     ? countText
     : countFormat === 'tasks'
@@ -49,6 +50,8 @@ export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, edit
           description={task.description}
           priority={task.priority}
           completed={task.completed}
+          category={task.category}
+          tags={task.tags}
           onToggle={onToggle ? () => onToggle(task.id) : undefined}
           onDelete={onDelete}
           onUpdateTask={onUpdateTask}

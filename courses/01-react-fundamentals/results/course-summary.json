@@ -1,11 +1,11 @@
 {
   "courseId": "01-react-fundamentals",
   "courseName": "React Fundamentals",
-  "lastUpdated": "2026-05-20T05:05:10.069Z",
+  "lastUpdated": "2026-05-20T05:11:45.058Z",
   "totalChallenges": 23,
-  "completedChallenges": 10,
-  "averageScore": 81.9,
-  "completionPercentage": 43.5,
+  "completedChallenges": 11,
+  "averageScore": 82.2,
+  "completionPercentage": 47.8,
   "badgeLevel": "none",
   "challengeResults": [
     {
@@ -73,6 +73,12 @@
       "challengeName": "useEffect - Debounced Search",
       "score": 84.7,
       "passed": true
+    },
+    {
+      "challengeId": "12-categories-and-tags",
+      "challengeName": "Categories and Tags",
+      "score": 85,
+      "passed": true
     }
   ],
   "skillStrengths": [
@@ -85,7 +91,8 @@
     "Task Editing",
     "Search Functionality",
     "useEffect - Local Storage Persistence",
-    "useEffect - Debounced Search"
+    "useEffect - Debounced Search",
+    "Categories and Tags"
   ],
   "improvementAreas": [
     "Dynamic Task Rendering"
