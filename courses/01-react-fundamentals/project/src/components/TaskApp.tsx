@@ -32,6 +32,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<SortOrder>('recently-added')
   const [editingId, setEditingId] = useState<number | string | null>(null)
+  const [search, setSearch] = useState('')
 
   function handleAddTask(task: Task) {
     setTasks(prev => [...prev, task])
@@ -58,13 +59,20 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     setEditingId(null)
   }
 
+  // filter → search → sort
   const filteredTasks = tasks.filter(t => {
     if (filter === 'active') return !t.completed
     if (filter === 'completed') return t.completed
     return true
   })
 
-  const sortedTasks = [...filteredTasks].sort((a, b) => {
+  const searchedTasks = filteredTasks.filter(t => {
+    if (!search.trim()) return true
+    const q = search.toLowerCase()
+    return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+  })
+
+  const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
     if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
     if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
@@ -75,14 +83,20 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     ? countText
     : countFormat === 'completed'
     ? `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`
-    : showFilterBar
-    ? `Showing ${filteredTasks.length} of ${tasks.length} tasks`
-    : `Tasks: ${tasks.length}`
+    : `Showing ${sortedTasks.length} of ${tasks.length} tasks`
 
   return (
     <div>
       {showFilterBar && (
-        <FilterBar filter={filter} onFilterChange={setFilter} sort={sort} onSortChange={setSort} />
+        <FilterBar
+          filter={filter}
+          onFilterChange={setFilter}
+          sort={sort}
+          onSortChange={setSort}
+          search={search}
+          onSearchChange={setSearch}
+          onClearSearch={() => setSearch('')}
+        />
       )}
       {showForm && <TaskForm onAddTask={handleAddTask} />}
       <TaskList
@@ -95,7 +109,9 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
         countText={computedCountText}
       />
       {sortedTasks.length === 0 && (
-        <p id="filter-empty-message">No tasks match this filter</p>
+        <p id="filter-empty-message">
+          {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}
+        </p>
       )}
     </div>
   )
