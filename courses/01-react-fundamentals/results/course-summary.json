@@ -1,11 +1,11 @@
 {
   "courseId": "01-react-fundamentals",
   "courseName": "React Fundamentals",
-  "lastUpdated": "2026-05-20T05:00:36.697Z",
+  "lastUpdated": "2026-05-20T05:05:10.069Z",
   "totalChallenges": 23,
-  "completedChallenges": 9,
-  "averageScore": 81.6,
-  "completionPercentage": 39.1,
+  "completedChallenges": 10,
+  "averageScore": 81.9,
+  "completionPercentage": 43.5,
   "badgeLevel": "none",
   "challengeResults": [
     {
@@ -67,6 +67,12 @@
       "challengeName": "useEffect - Local Storage Persistence",
       "score": 85,
       "passed": true
+    },
+    {
+      "challengeId": "11-useeffect-debounced-search",
+      "challengeName": "useEffect - Debounced Search",
+      "score": 84.7,
+      "passed": true
     }
   ],
   "skillStrengths": [
@@ -78,7 +84,8 @@
     "Priority-Based Sorting",
     "Task Editing",
     "Search Functionality",
-    "useEffect - Local Storage Persistence"
+    "useEffect - Local Storage Persistence",
+    "useEffect - Debounced Search"
   ],
   "improvementAreas": [
     "Dynamic Task Rendering"

@@ -165,5 +165,21 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "11-useeffect-debounced-search",
+    "challengeName": "useEffect - Debounced Search",
+    "aiReview": {
+      "challengeId": "11-useeffect-debounced-search",
+      "timestamp": "2026-05-20T05:05:10.066Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]

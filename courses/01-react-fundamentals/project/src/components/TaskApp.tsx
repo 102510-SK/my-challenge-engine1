@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TaskForm from './TaskForm'
 import TaskList from './TaskList'
 import FilterBar from './FilterBar'
@@ -33,6 +33,19 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   const [sort, setSort] = useState<SortOrder>('recently-added')
   const [editingId, setEditingId] = useState<number | string | null>(null)
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [searching, setSearching] = useState(false)
+
+  useEffect(() => {
+    if (search !== debouncedSearch) {
+      setSearching(true)
+    }
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search)
+      setSearching(false)
+    }, 300)
+    return () => clearTimeout(timeout)
+  }, [search])
 
   function handleAddTask(task: Task) {
     setTasks(prev => [...prev, task])
@@ -59,7 +72,6 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     setEditingId(null)
   }
 
-  // filter → search → sort
   const filteredTasks = tasks.filter(t => {
     if (filter === 'active') return !t.completed
     if (filter === 'completed') return t.completed
@@ -67,8 +79,8 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   })
 
   const searchedTasks = filteredTasks.filter(t => {
-    if (!search.trim()) return true
-    const q = search.toLowerCase()
+    if (!debouncedSearch.trim()) return true
+    const q = debouncedSearch.toLowerCase()
     return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
   })
 
@@ -95,9 +107,10 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
           onSortChange={setSort}
           search={search}
           onSearchChange={setSearch}
-          onClearSearch={() => setSearch('')}
+          onClearSearch={() => { setSearch(''); setDebouncedSearch('') }}
         />
       )}
+      {searching && <p id="searching-indicator">Searching...</p>}
       {showForm && <TaskForm onAddTask={handleAddTask} />}
       <TaskList
         tasks={sortedTasks}
@@ -108,7 +121,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
         setEditingId={setEditingId}
         countText={computedCountText}
       />
-      {sortedTasks.length === 0 && (
+      {sortedTasks.length === 0 && !searching && (
         <p id="filter-empty-message">
           {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}
         </p>
