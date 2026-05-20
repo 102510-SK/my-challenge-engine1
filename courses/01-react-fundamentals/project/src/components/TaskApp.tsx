@@ -4,7 +4,7 @@ import TaskList from './TaskList'
 import FilterBar from './FilterBar'
 
 type Filter = 'all' | 'active' | 'completed'
-type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical'
+type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'
 
 interface Task {
   id: number | string
@@ -14,6 +14,7 @@ interface Task {
   completed: boolean
   category?: string
   tags?: string[]
+  dueDate?: string
 }
 
 interface TaskAppProps {
@@ -41,27 +42,18 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
 
   useEffect(() => {
     if (search !== debouncedSearch) setSearching(true)
-    const timeout = setTimeout(() => {
-      setDebouncedSearch(search)
-      setSearching(false)
-    }, 300)
+    const timeout = setTimeout(() => { setDebouncedSearch(search); setSearching(false) }, 300)
     return () => clearTimeout(timeout)
   }, [search])
 
-  function handleAddTask(task: Task) {
-    setTasks(prev => [...prev, task])
-  }
+  function handleAddTask(task: Task) { setTasks(prev => [...prev, task]) }
 
   function handleToggle(id: number | string) {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
   }
 
   function handleDelete(id: number | string) {
-    if (onDelete) {
-      onDelete(id)
-    } else {
-      setTasks(prev => prev.filter(t => t.id !== id))
-    }
+    if (onDelete) { onDelete(id) } else { setTasks(prev => prev.filter(t => t.id !== id)) }
   }
 
   function handleUpdateTask(id: number | string, updates: Partial<Task>) {
@@ -72,11 +64,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
   const categories = [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[]
 
   const filteredTasks = tasks
-    .filter(t => {
-      if (filter === 'active') return !t.completed
-      if (filter === 'completed') return t.completed
-      return true
-    })
+    .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })
     .filter(t => !selectedCategory || t.category === selectedCategory)
     .filter(t => {
       if (!debouncedSearch.trim()) return true
@@ -88,6 +76,12 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
     if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
     if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+    if (sort === 'due-date') {
+      if (!a.dueDate && !b.dueDate) return 0
+      if (!a.dueDate) return 1
+      if (!b.dueDate) return -1
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+    }
     return 0
   })
 
@@ -101,15 +95,11 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     <div>
       {showFilterBar && (
         <FilterBar
-          filter={filter}
-          onFilterChange={setFilter}
-          sort={sort}
-          onSortChange={setSort}
-          search={search}
-          onSearchChange={setSearch}
+          filter={filter} onFilterChange={setFilter}
+          sort={sort} onSortChange={setSort}
+          search={search} onSearchChange={setSearch}
           onClearSearch={() => { setSearch(''); setDebouncedSearch('') }}
-          categories={categories}
-          selectedCategory={selectedCategory}
+          categories={categories} selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
         />
       )}

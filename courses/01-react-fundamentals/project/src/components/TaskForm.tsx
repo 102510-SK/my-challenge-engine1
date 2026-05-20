@@ -8,6 +8,7 @@ interface Task {
   completed: boolean
   category: string
   tags: string[]
+  dueDate?: string
 }
 
 interface TaskFormProps {
@@ -15,20 +16,18 @@ interface TaskFormProps {
   categories?: string[]
 }
 
-export default function TaskForm({ onAddTask, categories = ['General', 'Work', 'Personal'] }: TaskFormProps) {
+export default function TaskForm({ onAddTask, categories = [] }: TaskFormProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState('Medium')
   const [category, setCategory] = useState('General')
   const [tags, setTags] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [error, setError] = useState('')
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!title.trim()) {
-      setError('Title is required')
-      return
-    }
+    if (!title.trim()) { setError('Title is required'); return }
     setError('')
     onAddTask({
       id: Date.now(),
@@ -38,12 +37,10 @@ export default function TaskForm({ onAddTask, categories = ['General', 'Work', '
       completed: false,
       category,
       tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+      dueDate: dueDate || undefined,
     })
-    setTitle('')
-    setDescription('')
-    setPriority('Medium')
-    setCategory('General')
-    setTags('')
+    setTitle(''); setDescription(''); setPriority('Medium')
+    setCategory('General'); setTags(''); setDueDate('')
   }
 
   const allCategories = [...new Set(['General', 'Work', 'Personal', ...categories])]
@@ -67,6 +64,8 @@ export default function TaskForm({ onAddTask, categories = ['General', 'Work', '
       </select>
       <label htmlFor="task-tags">Tags</label>
       <input id="task-tags" type="text" placeholder="Tags (comma-separated)" value={tags} onChange={e => setTags(e.target.value)} />
+      <label htmlFor="task-due-date">Due Date</label>
+      <input id="task-due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
       <button type="submit">Add Task</button>
     </form>
   )

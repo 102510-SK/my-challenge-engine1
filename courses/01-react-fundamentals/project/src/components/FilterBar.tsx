@@ -1,5 +1,5 @@
 type Filter = 'all' | 'active' | 'completed'
-type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical'
+type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'
 
 interface FilterBarProps {
   filter: Filter
@@ -30,6 +30,7 @@ export default function FilterBar({
           <option value="priority-high-low">Priority: High to Low</option>
           <option value="priority-low-high">Priority: Low to High</option>
           <option value="alphabetical">Alphabetical</option>
+          <option value="due-date">Due Date (Soonest First)</option>
         </select>
       )}
       {onCategoryChange && (
@@ -48,9 +49,7 @@ export default function FilterBar({
           onChange={e => onSearchChange(e.target.value)}
         />
       )}
-      {search && (
-        <button id="clear-search" onClick={onClearSearch}>Clear search</button>
-      )}
+      {search && <button id="clear-search" onClick={onClearSearch}>Clear search</button>}
     </div>
   )
 }

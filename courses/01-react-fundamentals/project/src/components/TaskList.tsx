@@ -8,6 +8,7 @@ export interface Task {
   completed: boolean
   category?: string
   tags?: string[]
+  dueDate?: string
 }
 
 interface TaskListProps {
@@ -52,6 +53,7 @@ export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, edit
           completed={task.completed}
           category={task.category}
           tags={task.tags}
+          dueDate={task.dueDate}
           onToggle={onToggle ? () => onToggle(task.id) : undefined}
           onDelete={onDelete}
           onUpdateTask={onUpdateTask}
