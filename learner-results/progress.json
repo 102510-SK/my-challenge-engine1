@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2026-05-20T05:30:16.403Z",
+  "lastUpdated": "2026-05-20T05:39:35.451Z",
   "pathway": {
     "name": "Modern React Engineer",
     "version": "1.0.0",
-    "overallScore": 27.2,
-    "completionPercentage": 24.5,
+    "overallScore": 27.3,
+    "completionPercentage": 26.4,
     "badgeLevel": "none",
     "totalChallenges": 53,
-    "completedChallenges": 13
+    "completedChallenges": 14
   },
   "courses": {
     "01-react-fundamentals": {
       "courseId": "01-react-fundamentals",
       "courseName": "React Fundamentals",
-      "averageScore": 82.5,
-      "completionPercentage": 56.5,
+      "averageScore": 82.7,
+      "completionPercentage": 60.9,
       "badgeLevel": "bronze",
       "totalChallenges": 23,
-      "completedChallenges": 13,
+      "completedChallenges": 14,
       "challenges": {
         "01-static-task-display": {
           "challengeId": "01-static-task-display",
@@ -223,6 +223,21 @@
           "scores": {
             "functionalTests": 100,
             "codeQuality": 98,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 0
+          }
+        },
+        "15-component-organization": {
+          "challengeId": "15-component-organization",
+          "challengeName": "Component Organization with Props",
+          "passed": true,
+          "score": 85,
+          "lastRun": "2026-05-20T05:39:16.201Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 100,
             "architecture": 100,
             "bestPractices": 100,
             "e2eTests": 100,

@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import Button from './Button'
+import Badge from './Badge'
+import StatusIndicator from './StatusIndicator'
 
 interface TaskCardProps {
   id?: number | string
@@ -12,27 +15,21 @@ interface TaskCardProps {
   onToggle?: () => void
   onDelete?: (id: number | string) => void
   onUpdateTask?: (id: number | string, updates: {
-    title: string
-    description: string
-    priority: string
-    category?: string
-    tags?: string[]
-    dueDate?: string
+    title: string; description: string; priority: string
+    category?: string; tags?: string[]; dueDate?: string
   }) => void
   isEditing?: boolean
   onEditStart?: () => void
   onEditCancel?: () => void
 }
 
-function getDueDateLabel(dueDate: string, completed: boolean) {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const due = new Date(dueDate)
-  due.setHours(0, 0, 0, 0)
-  const diffDays = Math.round((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-  if (!completed && diffDays < 0) return 'Overdue'
-  if (diffDays === 0) return 'Due Today'
-  if (diffDays > 0 && diffDays <= 3) return 'Due Soon'
+function getDueDateStatus(dueDate: string, completed: boolean): 'overdue' | 'due-today' | 'due-soon' | null {
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const due = new Date(dueDate); due.setHours(0, 0, 0, 0)
+  const diff = Math.round((due.getTime() - today.getTime()) / 86400000)
+  if (!completed && diff < 0) return 'overdue'
+  if (diff === 0) return 'due-today'
+  if (diff > 0 && diff <= 3) return 'due-soon'
   return null
 }
 
@@ -50,23 +47,17 @@ export default function TaskCard({
 
   useEffect(() => {
     if (isEditing) {
-      setEditTitle(title)
-      setEditDescription(description)
-      setEditPriority(priority)
-      setEditCategory(category ?? 'General')
-      setEditTags(tags?.join(', ') ?? '')
-      setEditDueDate(dueDate ?? '')
-      setEditError('')
+      setEditTitle(title); setEditDescription(description); setEditPriority(priority)
+      setEditCategory(category ?? 'General'); setEditTags(tags?.join(', ') ?? '')
+      setEditDueDate(dueDate ?? ''); setEditError('')
     }
   }, [isEditing, title, description, priority, category, tags, dueDate])
 
   function handleSave() {
     if (!editTitle.trim()) { setEditError('Title is required'); return }
     onUpdateTask?.(id!, {
-      title: editTitle.trim(),
-      description: editDescription.trim(),
-      priority: editPriority,
-      category: editCategory,
+      title: editTitle.trim(), description: editDescription.trim(),
+      priority: editPriority, category: editCategory,
       tags: editTags.split(',').map(t => t.trim()).filter(Boolean),
       dueDate: editDueDate || undefined,
     })
@@ -76,8 +67,8 @@ export default function TaskCard({
     if (window.confirm('Are you sure?') && id !== undefined) onDelete?.(id)
   }
 
-  const dueDateLabel = dueDate ? getDueDateLabel(dueDate, completed ?? false) : null
-  const isOverdue = dueDateLabel === 'Overdue'
+  const dueDateStatus = dueDate ? getDueDateStatus(dueDate, completed ?? false) : null
+  const isOverdue = dueDateStatus === 'overdue'
 
   if (isEditing) {
     return (
@@ -97,41 +88,33 @@ export default function TaskCard({
         </select>
         <input type="text" placeholder="Tags (comma-separated)" value={editTags} onChange={e => setEditTags(e.target.value)} />
         <input type="date" value={editDueDate} onChange={e => setEditDueDate(e.target.value)} />
-        <button onClick={handleSave}>Save</button>
-        <button onClick={onEditCancel}>Cancel</button>
+        <Button onClick={handleSave} variant="primary">Save</Button>
+        <Button onClick={onEditCancel} variant="secondary">Cancel</Button>
       </article>
     )
   }
 
   return (
-    <article
-      id="task-card"
-      data-completed={completed ? 'true' : 'false'}
-      data-overdue={isOverdue ? 'true' : 'false'}
-      style={{ background: completed ? '#f0f0f0' : isOverdue ? '#fff0f0' : '#fff' }}
-    >
+    <article id="task-card" data-completed={completed ? 'true' : 'false'} data-overdue={isOverdue ? 'true' : 'false'}
+      style={{ background: completed ? '#f0f0f0' : isOverdue ? '#fff0f0' : '#fff' }}>
       {onToggle && <input type="checkbox" checked={completed ?? false} onChange={onToggle} />}
       <h2 style={{ textDecoration: completed ? 'line-through' : 'none' }}>{title}</h2>
       <p style={{ textDecoration: completed ? 'line-through' : 'none' }}>{description}</p>
-      <span>Priority: {priority}</span>
-      {category && <span id="task-category">{category}</span>}
+      <Badge variant="priority">Priority: {priority}</Badge>
+      {category && <Badge variant="category" ><span id="task-category">{category}</span></Badge>}
       {tags && tags.length > 0 && (
         <div id="task-tags">
-          {tags.map(tag => (
-            <span key={tag} data-tag={tag} style={{ marginRight: '4px', padding: '2px 6px', background: '#e0e0e0', borderRadius: '4px' }}>{tag}</span>
-          ))}
+          {tags.map(tag => <Badge key={tag} variant="tag"><span data-tag={tag}>{tag}</span></Badge>)}
         </div>
       )}
       {dueDate && (
         <div id="task-due-date">
           <span>{new Date(dueDate).toLocaleDateString()}</span>
-          {dueDateLabel && (
-            <span style={{ marginLeft: '8px', color: isOverdue ? 'red' : 'orange' }}>{dueDateLabel}</span>
-          )}
+          {dueDateStatus && <StatusIndicator status={dueDateStatus} />}
         </div>
       )}
-      {onEditStart && <button onClick={onEditStart}>Edit</button>}
-      {onDelete && <button onClick={handleDelete}>Delete</button>}
+      {onEditStart && <Button onClick={onEditStart} variant="secondary">Edit</Button>}
+      {onDelete && <Button onClick={handleDelete} variant="danger">Delete</Button>}
     </article>
   )
 }

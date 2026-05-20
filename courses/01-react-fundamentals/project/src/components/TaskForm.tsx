@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import FormInput from './FormInput'
+import Button from './Button'
 
 interface Task {
   id: number | string
@@ -48,10 +50,8 @@ export default function TaskForm({ onAddTask, categories = [] }: TaskFormProps) 
   return (
     <form onSubmit={handleSubmit}>
       {error && <p id="task-form-error">{error}</p>}
-      <label htmlFor="task-title">Title</label>
-      <input id="task-title" type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
-      <label htmlFor="task-description">Description</label>
-      <input id="task-description" type="text" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
+      <FormInput id="task-title" label="Title" value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" />
+      <FormInput id="task-description" label="Description" value={description} onChange={e => setDescription(e.target.value)} placeholder="Description" />
       <label htmlFor="task-priority">Priority</label>
       <select id="task-priority" value={priority} onChange={e => setPriority(e.target.value)}>
         <option value="Low">Low</option>
@@ -62,11 +62,9 @@ export default function TaskForm({ onAddTask, categories = [] }: TaskFormProps) 
       <select id="task-category" value={category} onChange={e => setCategory(e.target.value)}>
         {allCategories.map(c => <option key={c} value={c}>{c}</option>)}
       </select>
-      <label htmlFor="task-tags">Tags</label>
-      <input id="task-tags" type="text" placeholder="Tags (comma-separated)" value={tags} onChange={e => setTags(e.target.value)} />
-      <label htmlFor="task-due-date">Due Date</label>
-      <input id="task-due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
-      <button type="submit">Add Task</button>
+      <FormInput id="task-tags" label="Tags" value={tags} onChange={e => setTags(e.target.value)} placeholder="Tags (comma-separated)" />
+      <FormInput id="task-due-date" label="Due Date" value={dueDate} onChange={e => setDueDate(e.target.value)} type="date" />
+      <Button type="submit" variant="primary">Add Task</Button>
     </form>
   )
 }
