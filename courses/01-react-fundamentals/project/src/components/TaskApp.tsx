@@ -3,6 +3,7 @@ import TaskForm from './TaskForm'
 import TaskList from './TaskList'
 import FilterBar from './FilterBar'
 import StatsPanel from './StatsPanel'
+import ThemeToggle from './ThemeToggle'
 
 type Filter = 'all' | 'active' | 'completed'
 type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'
@@ -94,6 +95,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
 
   return (
     <div>
+      <ThemeToggle />
       {showStatsPanel && <StatsPanel tasks={tasks} />}
       {showFilterBar && (
         <FilterBar

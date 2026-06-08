@@ -23,3 +23,11 @@
   border-radius: 6px;
   padding: 1rem;
 }
+
+:root { --bg: #ffffff; --text: #111111; --card-bg: #ffffff; --border: #dddddd; }
+[data-theme="dark"] { --bg: #1a1a1a; --text: #f0f0f0; --card-bg: #2a2a2a; --border: #444444; }
+
+body { background: var(--bg); color: var(--text); }
+#task-card { background: var(--card-bg) !important; border-color: var(--border); color: var(--text); }
+#filter-bar { background: var(--bg); color: var(--text); }
+#stats-panel { background: var(--card-bg); color: var(--text); }
