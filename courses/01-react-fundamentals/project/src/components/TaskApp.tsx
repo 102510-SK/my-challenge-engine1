@@ -1,27 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import TaskForm from './TaskForm'
 import TaskList from './TaskList'
 import FilterBar from './FilterBar'
 import StatsPanel from './StatsPanel'
 import ThemeToggle from './ThemeToggle'
+import type { Action, Task } from '../reducers/taskReducer'
+import { addTask, updateTask, deleteTask, toggleTask } from '../reducers/taskReducer'
 
 type Filter = 'all' | 'active' | 'completed'
 type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'
 
-interface Task {
-  id: number | string
-  title: string
-  description: string
-  priority: string
-  completed: boolean
-  category?: string
-  tags?: string[]
-  dueDate?: string
-}
-
 interface TaskAppProps {
   tasks: Task[]
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
+  dispatch?: React.Dispatch<Action>
   showForm?: boolean
   countFormat?: string
   countText?: string
@@ -33,7 +25,7 @@ interface TaskAppProps {
 
 const PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }
 
-export default function TaskApp({ tasks, setTasks, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {
+export default function TaskApp({ tasks, setTasks, dispatch, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<SortOrder>('recently-added')
   const [editingId, setEditingId] = useState<number | string | null>(null)
@@ -48,50 +40,65 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
     return () => clearTimeout(timeout)
   }, [search])
 
-  function handleAddTask(task: Task) { setTasks(prev => [...prev, task]) }
+  const handleAddTask = useCallback((task: Task) => {
+    if (dispatch) { dispatch(addTask(task)) } else { setTasks(prev => [...prev, task]) }
+  }, [dispatch, setTasks])
 
-  function handleToggle(id: number | string) {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
-  }
-
-  function handleDelete(id: number | string) {
-    if (onDelete) { onDelete(id) } else { setTasks(prev => prev.filter(t => t.id !== id)) }
-  }
-
-  function handleUpdateTask(id: number | string, updates: Partial<Task>) {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))
-    setEditingId(null)
-  }
-
-  const categories = [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[]
-
-  const filteredTasks = tasks
-    .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })
-    .filter(t => !selectedCategory || t.category === selectedCategory)
-    .filter(t => {
-      if (!debouncedSearch.trim()) return true
-      const q = debouncedSearch.toLowerCase()
-      return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
-    })
-
-  const sortedTasks = [...filteredTasks].sort((a, b) => {
-    if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
-    if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
-    if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
-    if (sort === 'due-date') {
-      if (!a.dueDate && !b.dueDate) return 0
-      if (!a.dueDate) return 1
-      if (!b.dueDate) return -1
-      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+  const handleToggle = useCallback((id: number | string) => {
+    if (dispatch) { dispatch(toggleTask(id)) } else {
+      setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
     }
-    return 0
-  })
+  }, [dispatch, setTasks])
 
-  const computedCountText = countText
-    ? countText
-    : countFormat === 'completed'
-    ? `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`
-    : `Showing ${sortedTasks.length} of ${tasks.length} tasks`
+  const handleDelete = useCallback((id: number | string) => {
+    if (onDelete) { onDelete(id) }
+    else if (dispatch) { dispatch(deleteTask(id)) }
+    else { setTasks(prev => prev.filter(t => t.id !== id)) }
+  }, [onDelete, dispatch, setTasks])
+
+  const handleUpdateTask = useCallback((id: number | string, updates: Partial<Task>) => {
+    if (dispatch) { dispatch(updateTask(id, updates)) } else {
+      setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))
+    }
+    setEditingId(null)
+  }, [dispatch, setTasks])
+
+  const categories = useMemo(
+    () => [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[],
+    [tasks]
+  )
+
+  const sortedTasks = useMemo(() => {
+    const filtered = tasks
+      .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })
+      .filter(t => !selectedCategory || t.category === selectedCategory)
+      .filter(t => {
+        if (!debouncedSearch.trim()) return true
+        const q = debouncedSearch.toLowerCase()
+        return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
+      })
+
+    return [...filtered].sort((a, b) => {
+      if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)
+      if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)
+      if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+      if (sort === 'due-date') {
+        if (!a.dueDate && !b.dueDate) return 0
+        if (!a.dueDate) return 1
+        if (!b.dueDate) return -1
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+      }
+      return 0
+    })
+  }, [tasks, filter, selectedCategory, debouncedSearch, sort])
+
+  const computedCountText = useMemo(() => {
+    if (countText) return countText
+    if (countFormat === 'completed') return `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`
+    return `Showing ${sortedTasks.length} of ${tasks.length} tasks`
+  }, [countText, countFormat, tasks, sortedTasks.length])
+
+  const handleClearSearch = useCallback(() => { setSearch(''); setDebouncedSearch('') }, [])
 
   return (
     <div>
@@ -102,7 +109,7 @@ export default function TaskApp({ tasks, setTasks, showForm, countFormat, countT
           filter={filter} onFilterChange={setFilter}
           sort={sort} onSortChange={setSort}
           search={search} onSearchChange={setSearch}
-          onClearSearch={() => { setSearch(''); setDebouncedSearch('') }}
+          onClearSearch={handleClearSearch}
           categories={categories} selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
         />

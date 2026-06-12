@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from './Button'
 import Badge from './Badge'
 import StatusIndicator from './StatusIndicator'
@@ -33,7 +33,7 @@ function getDueDateStatus(dueDate: string, completed: boolean): 'overdue' | 'due
   return null
 }
 
-export default function TaskCard({
+function TaskCard({
   id, title, description, priority, completed, category, tags, dueDate,
   onToggle, onDelete, onUpdateTask, isEditing, onEditStart, onEditCancel
 }: TaskCardProps) {
@@ -101,7 +101,7 @@ export default function TaskCard({
       <h2 style={{ textDecoration: completed ? 'line-through' : 'none' }}>{title}</h2>
       <p style={{ textDecoration: completed ? 'line-through' : 'none' }}>{description}</p>
       <Badge variant="priority">Priority: {priority}</Badge>
-      {category && <Badge variant="category" ><span id="task-category">{category}</span></Badge>}
+      {category && <Badge variant="category"><span id="task-category">{category}</span></Badge>}
       {tags && tags.length > 0 && (
         <div id="task-tags">
           {tags.map(tag => <Badge key={tag} variant="tag"><span data-tag={tag}>{tag}</span></Badge>)}
@@ -118,3 +118,5 @@ export default function TaskCard({
     </article>
   )
 }
+
+export default React.memo(TaskCard)

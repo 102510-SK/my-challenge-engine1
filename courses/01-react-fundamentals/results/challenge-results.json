@@ -6363,5 +6363,628 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "18-usereducer-complex-state",
+    "challengeName": "useReducer - Complex State Management",
+    "timestamp": "2026-06-12T05:33:17.495Z",
+    "scores": {
+      "functionalTests": 100,
+      "codeQuality": 88,
+      "architecture": 100,
+      "bestPractices": 100,
+      "e2eTests": 100,
+      "aiReview": 0
+    },
+    "totalScore": 83.2,
+    "passed": true,
+    "errors": [],
+    "warnings": [],
+    "testResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 2,
+      "passedTests": 2,
+      "failedTests": 0,
+      "details": [
+        {
+          "assertionResults": [
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 18: useReducer - Complex State Management"
+              ],
+              "fullName": " Challenge 18: useReducer - Complex State Management App should render",
+              "status": "passed",
+              "title": "App should render",
+              "duration": 132,
+              "failureMessages": []
+            },
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 18: useReducer - Complex State Management"
+              ],
+              "fullName": " Challenge 18: useReducer - Complex State Management TaskList should render tasks",
+              "status": "passed",
+              "title": "TaskList should render tasks",
+              "duration": 40,
+              "failureMessages": []
+            }
+          ],
+          "startTime": 1781242407326,
+          "endTime": 1781242407498,
+          "status": "passed",
+          "message": "",
+          "name": "C:/Users/HP/OneDrive/Documents/challenge-engine-react/courses/01-react-fundamentals/project/tests/challenge-18.test.tsx"
+        }
+      ]
+    },
+    "lintResults": {
+      "score": 88,
+      "passed": false,
+      "totalIssues": 2,
+      "errors": 1,
+      "warnings": 1,
+      "details": [
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\App.tsx",
+          "messages": [
+            {
+              "ruleId": "@typescript-eslint/no-unused-vars",
+              "severity": 2,
+              "message": "'setTasksFromStorage' is assigned a value but never used.",
+              "line": 41,
+              "column": 9,
+              "nodeType": "Identifier",
+              "messageId": "unusedVar",
+              "endLine": 41,
+              "endColumn": 28
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 1,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import './App.css'\r\nimport { useReducer, useEffect } from 'react'\r\nimport { BrowserRouter, Routes, Route } from 'react-router-dom'\r\nimport ChallengeList from './components/ChallengeList'\r\nimport TaskList from './components/TaskList'\r\nimport TaskApp from './components/TaskApp'\r\nimport TaskDetailPage from './components/TaskDetailPage'\r\nimport FetchDemoView from './components/FetchDemoView'\r\nimport { ThemeProvider } from './contexts/ThemeContext'\r\nimport { taskReducer, setTasks } from './reducers/taskReducer'\r\nimport type { Task } from './reducers/taskReducer'\r\n\r\nconst STORAGE_KEY = 'task-app-tasks'\r\n\r\nconst INITIAL_TASKS: Task[] = [\r\n  { id: 1, title: 'First Task', description: 'Description one', priority: 'High', completed: false },\r\n  { id: 2, title: 'Second Task', description: 'Description two', priority: 'Medium', completed: false },\r\n  { id: 3, title: 'Third Task', description: 'Description three', priority: 'Low', completed: false },\r\n  { id: 4, title: 'Fourth Task', description: 'Description four', priority: 'Medium', completed: false },\r\n  { id: 5, title: 'Fifth Task', description: 'Description five', priority: 'High', completed: false },\r\n]\r\n\r\nfunction getInitialTasks(): Task[] {\r\n  try {\r\n    const stored = localStorage.getItem(STORAGE_KEY)\r\n    if (stored) {\r\n      const parsed = JSON.parse(stored)\r\n      if (Array.isArray(parsed)) return parsed as Task[]\r\n    }\r\n  } catch { /* ignore */ }\r\n  return INITIAL_TASKS\r\n}\r\n\r\nfunction AppContent() {\r\n  const [tasks, dispatch] = useReducer(taskReducer, undefined, getInitialTasks)\r\n\r\n  useEffect(() => {\r\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))\r\n  }, [tasks])\r\n\r\n  const setTasksFromStorage = (t: Task[]) => dispatch(setTasks(t))\r\n\r\n  const handleDelete = (id: string | number) => {\r\n    if (window.confirm('Are you sure?')) {\r\n      dispatch({ type: 'DELETE_TASK', payload: id })\r\n    }\r\n  }\r\n\r\n  // setTasks shim so TaskApp can still call setTasks(fn) or setTasks(arr)\r\n  const setTasksShim: React.Dispatch<React.SetStateAction<Task[]>> = (value) => {\r\n    if (typeof value === 'function') {\r\n      dispatch(setTasks(value(tasks)))\r\n    } else {\r\n      dispatch(setTasks(value))\r\n    }\r\n  }\r\n\r\n  return (\r\n    <BrowserRouter>\r\n      <div className=\"App\">\r\n        <main>\r\n          <Routes>\r\n            <Route path=\"/\" element={<ChallengeList />} />\r\n            <Route path=\"/challenge/01-static-task-display\" element={<TaskList />} />\r\n            <Route path=\"/challenge/02-dynamic-task-rendering\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm={false} countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/03-adding-new-tasks\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/04-task-completion-toggle\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"completed\" />} />\r\n            <Route path=\"/challenge/05-task-deletion\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" onDelete={handleDelete} />} />\r\n            <Route path=\"/challenge/06-task-filtering\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/07-priority-based-sorting\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/08-task-editing\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/09-search-functionality\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/10-useeffect-local-storage\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/11-useeffect-debounced-search\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/12-categories-and-tags\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/13-due-dates-and-sorting\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/14-task-statistics-dashboard\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showStatsPanel />} />\r\n            <Route path=\"/challenge/15-component-organization\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/16-context-api-theme\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/17-custom-hook-uselocalstorage\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/18-usereducer-complex-state\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/19-performance-optimization\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/20-error-boundaries\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/21-react-router\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" linkToTaskDetail />} />\r\n            <Route path=\"/challenge/21-react-router/task/:id\" element={<TaskDetailPage />} />\r\n            <Route path=\"/challenge/22-data-fetching\" element={<FetchDemoView />} />\r\n            <Route path=\"/challenge/23-useref-focus-management\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n          </Routes>\r\n        </main>\r\n      </div>\r\n    </BrowserRouter>\r\n  )\r\n}\r\n\r\nfunction App() {\r\n  return (\r\n    <ThemeProvider>\r\n      <AppContent />\r\n    </ThemeProvider>\r\n  )\r\n}\r\n\r\nexport default App",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\TaskApp.tsx",
+          "messages": [
+            {
+              "ruleId": "react-hooks/exhaustive-deps",
+              "severity": 1,
+              "message": "React Hook useEffect has a missing dependency: 'debouncedSearch'. Either include it or remove the dependency array.",
+              "line": 41,
+              "column": 6,
+              "nodeType": "ArrayExpression",
+              "endLine": 41,
+              "endColumn": 14,
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [debouncedSearch, search]",
+                  "fix": {
+                    "range": [
+                      1753,
+                      1761
+                    ],
+                    "text": "[debouncedSearch, search]"
+                  }
+                }
+              ]
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 1,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import { useState, useEffect } from 'react'\r\nimport TaskForm from './TaskForm'\r\nimport TaskList from './TaskList'\r\nimport FilterBar from './FilterBar'\r\nimport StatsPanel from './StatsPanel'\r\nimport ThemeToggle from './ThemeToggle'\r\nimport type { Action, Task } from '../reducers/taskReducer'\r\nimport { addTask, updateTask, deleteTask, toggleTask } from '../reducers/taskReducer'\r\n\r\ntype Filter = 'all' | 'active' | 'completed'\r\ntype SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'\r\n\r\ninterface TaskAppProps {\r\n  tasks: Task[]\r\n  setTasks: React.Dispatch<React.SetStateAction<Task[]>>\r\n  dispatch?: React.Dispatch<Action>\r\n  showForm?: boolean\r\n  countFormat?: string\r\n  countText?: string\r\n  onDelete?: (id: number | string) => void\r\n  showFilterBar?: boolean\r\n  showStatsPanel?: boolean\r\n  linkToTaskDetail?: boolean\r\n}\r\n\r\nconst PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }\r\n\r\nexport default function TaskApp({ tasks, setTasks, dispatch, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {\r\n  const [filter, setFilter] = useState<Filter>('all')\r\n  const [sort, setSort] = useState<SortOrder>('recently-added')\r\n  const [editingId, setEditingId] = useState<number | string | null>(null)\r\n  const [search, setSearch] = useState('')\r\n  const [debouncedSearch, setDebouncedSearch] = useState('')\r\n  const [searching, setSearching] = useState(false)\r\n  const [selectedCategory, setSelectedCategory] = useState('')\r\n\r\n  useEffect(() => {\r\n    if (search !== debouncedSearch) setSearching(true)\r\n    const timeout = setTimeout(() => { setDebouncedSearch(search); setSearching(false) }, 300)\r\n    return () => clearTimeout(timeout)\r\n  }, [search])\r\n\r\n  function handleAddTask(task: Task) {\r\n    if (dispatch) { dispatch(addTask(task)) } else { setTasks(prev => [...prev, task]) }\r\n  }\r\n\r\n  function handleToggle(id: number | string) {\r\n    if (dispatch) { dispatch(toggleTask(id)) } else {\r\n      setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))\r\n    }\r\n  }\r\n\r\n  function handleDelete(id: number | string) {\r\n    if (onDelete) { onDelete(id) }\r\n    else if (dispatch) { dispatch(deleteTask(id)) }\r\n    else { setTasks(prev => prev.filter(t => t.id !== id)) }\r\n  }\r\n\r\n  function handleUpdateTask(id: number | string, updates: Partial<Task>) {\r\n    if (dispatch) { dispatch(updateTask(id, updates)) } else {\r\n      setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))\r\n    }\r\n    setEditingId(null)\r\n  }\r\n\r\n  const categories = [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[]\r\n\r\n  const filteredTasks = tasks\r\n    .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })\r\n    .filter(t => !selectedCategory || t.category === selectedCategory)\r\n    .filter(t => {\r\n      if (!debouncedSearch.trim()) return true\r\n      const q = debouncedSearch.toLowerCase()\r\n      return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)\r\n    })\r\n\r\n  const sortedTasks = [...filteredTasks].sort((a, b) => {\r\n    if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)\r\n    if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)\r\n    if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())\r\n    if (sort === 'due-date') {\r\n      if (!a.dueDate && !b.dueDate) return 0\r\n      if (!a.dueDate) return 1\r\n      if (!b.dueDate) return -1\r\n      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()\r\n    }\r\n    return 0\r\n  })\r\n\r\n  const computedCountText = countText\r\n    ? countText\r\n    : countFormat === 'completed'\r\n    ? `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`\r\n    : `Showing ${sortedTasks.length} of ${tasks.length} tasks`\r\n\r\n  return (\r\n    <div>\r\n      <ThemeToggle />\r\n      {showStatsPanel && <StatsPanel tasks={tasks} />}\r\n      {showFilterBar && (\r\n        <FilterBar\r\n          filter={filter} onFilterChange={setFilter}\r\n          sort={sort} onSortChange={setSort}\r\n          search={search} onSearchChange={setSearch}\r\n          onClearSearch={() => { setSearch(''); setDebouncedSearch('') }}\r\n          categories={categories} selectedCategory={selectedCategory}\r\n          onCategoryChange={setSelectedCategory}\r\n        />\r\n      )}\r\n      {searching && <p id=\"searching-indicator\">Searching...</p>}\r\n      {showForm && <TaskForm onAddTask={handleAddTask} categories={categories} />}\r\n      <TaskList\r\n        tasks={sortedTasks}\r\n        onToggle={handleToggle}\r\n        onDelete={handleDelete}\r\n        onUpdateTask={handleUpdateTask}\r\n        editingId={editingId}\r\n        setEditingId={setEditingId}\r\n        countText={computedCountText}\r\n      />\r\n      {sortedTasks.length === 0 && !searching && (\r\n        <p id=\"filter-empty-message\">\r\n          {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}\r\n        </p>\r\n      )}\r\n    </div>\r\n  )\r\n}",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\reducers\\taskReducer.ts",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        }
+      ]
+    },
+    "architectureResults": {
+      "score": 100,
+      "passed": true,
+      "patternsFound": [
+        "functionalComponent",
+        "useReducer"
+      ],
+      "patternsMissing": [],
+      "details": [
+        {
+          "file": "src/App.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "useReducer"
+          ],
+          "patternsMissing": []
+        },
+        {
+          "file": "src/reducers/taskReducer.ts",
+          "patternsFound": [],
+          "patternsMissing": [
+            "functionalComponent",
+            "useReducer"
+          ]
+        },
+        {
+          "file": "src/components/TaskApp.tsx",
+          "patternsFound": [
+            "functionalComponent"
+          ],
+          "patternsMissing": [
+            "useReducer"
+          ]
+        }
+      ]
+    },
+    "bestPracticesResults": {
+      "score": 100,
+      "passed": true,
+      "issues": [],
+      "details": [],
+      "note": "No best practices requirements specified in challenge"
+    },
+    "e2eResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 1,
+      "passedTests": 1,
+      "failedTests": 0,
+      "details": [
+        {
+          "title": "challenge-18.spec.ts",
+          "file": "challenge-18.spec.ts",
+          "column": 0,
+          "line": 0,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Challenge 18: useReducer - E2E",
+              "file": "challenge-18.spec.ts",
+              "line": 3,
+              "column": 6,
+              "specs": [
+                {
+                  "title": "should display task list",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1558,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-12T05:33:49.069Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "50842316024f411078d2-dce201608bcba5c43bc9",
+                  "file": "challenge-18.spec.ts",
+                  "line": 8,
+                  "column": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "screenshots": []
+    },
+    "aiReviewResults": {
+      "challengeId": "18-usereducer-complex-state",
+      "timestamp": "2026-06-12T05:33:53.896Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    },
+    "aiResults": {
+      "challengeId": "18-usereducer-complex-state",
+      "timestamp": "2026-06-12T05:33:53.896Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
+  },
+  {
+    "challengeId": "19-performance-optimization",
+    "challengeName": "Performance Optimization",
+    "timestamp": "2026-06-12T05:40:40.586Z",
+    "scores": {
+      "functionalTests": 100,
+      "codeQuality": 88,
+      "architecture": 100,
+      "bestPractices": 100,
+      "e2eTests": 100,
+      "aiReview": 0
+    },
+    "totalScore": 83.2,
+    "passed": true,
+    "errors": [],
+    "warnings": [],
+    "testResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 2,
+      "passedTests": 2,
+      "failedTests": 0,
+      "details": [
+        {
+          "assertionResults": [
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 19: Performance Optimization"
+              ],
+              "fullName": " Challenge 19: Performance Optimization TaskCard should render",
+              "status": "passed",
+              "title": "TaskCard should render",
+              "duration": 98,
+              "failureMessages": []
+            },
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 19: Performance Optimization"
+              ],
+              "fullName": " Challenge 19: Performance Optimization TaskList should render TaskCards",
+              "status": "passed",
+              "title": "TaskList should render TaskCards",
+              "duration": 10,
+              "failureMessages": []
+            }
+          ],
+          "startTime": 1781242848702,
+          "endTime": 1781242848810,
+          "status": "passed",
+          "message": "",
+          "name": "C:/Users/HP/OneDrive/Documents/challenge-engine-react/courses/01-react-fundamentals/project/tests/challenge-19.test.tsx"
+        }
+      ]
+    },
+    "lintResults": {
+      "score": 88,
+      "passed": false,
+      "totalIssues": 2,
+      "errors": 1,
+      "warnings": 1,
+      "details": [
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\App.tsx",
+          "messages": [
+            {
+              "ruleId": "@typescript-eslint/no-unused-vars",
+              "severity": 2,
+              "message": "'setTasksFromStorage' is assigned a value but never used.",
+              "line": 41,
+              "column": 9,
+              "nodeType": "Identifier",
+              "messageId": "unusedVar",
+              "endLine": 41,
+              "endColumn": 28
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 1,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import './App.css'\r\nimport { useReducer, useEffect } from 'react'\r\nimport { BrowserRouter, Routes, Route } from 'react-router-dom'\r\nimport ChallengeList from './components/ChallengeList'\r\nimport TaskList from './components/TaskList'\r\nimport TaskApp from './components/TaskApp'\r\nimport TaskDetailPage from './components/TaskDetailPage'\r\nimport FetchDemoView from './components/FetchDemoView'\r\nimport { ThemeProvider } from './contexts/ThemeContext'\r\nimport { taskReducer, setTasks } from './reducers/taskReducer'\r\nimport type { Task } from './reducers/taskReducer'\r\n\r\nconst STORAGE_KEY = 'task-app-tasks'\r\n\r\nconst INITIAL_TASKS: Task[] = [\r\n  { id: 1, title: 'First Task', description: 'Description one', priority: 'High', completed: false },\r\n  { id: 2, title: 'Second Task', description: 'Description two', priority: 'Medium', completed: false },\r\n  { id: 3, title: 'Third Task', description: 'Description three', priority: 'Low', completed: false },\r\n  { id: 4, title: 'Fourth Task', description: 'Description four', priority: 'Medium', completed: false },\r\n  { id: 5, title: 'Fifth Task', description: 'Description five', priority: 'High', completed: false },\r\n]\r\n\r\nfunction getInitialTasks(): Task[] {\r\n  try {\r\n    const stored = localStorage.getItem(STORAGE_KEY)\r\n    if (stored) {\r\n      const parsed = JSON.parse(stored)\r\n      if (Array.isArray(parsed)) return parsed as Task[]\r\n    }\r\n  } catch { /* ignore */ }\r\n  return INITIAL_TASKS\r\n}\r\n\r\nfunction AppContent() {\r\n  const [tasks, dispatch] = useReducer(taskReducer, undefined, getInitialTasks)\r\n\r\n  useEffect(() => {\r\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))\r\n  }, [tasks])\r\n\r\n  const setTasksFromStorage = (t: Task[]) => dispatch(setTasks(t))\r\n\r\n  const handleDelete = (id: string | number) => {\r\n    if (window.confirm('Are you sure?')) {\r\n      dispatch({ type: 'DELETE_TASK', payload: id })\r\n    }\r\n  }\r\n\r\n  // setTasks shim so TaskApp can still call setTasks(fn) or setTasks(arr)\r\n  const setTasksShim: React.Dispatch<React.SetStateAction<Task[]>> = (value) => {\r\n    if (typeof value === 'function') {\r\n      dispatch(setTasks(value(tasks)))\r\n    } else {\r\n      dispatch(setTasks(value))\r\n    }\r\n  }\r\n\r\n  return (\r\n    <BrowserRouter>\r\n      <div className=\"App\">\r\n        <main>\r\n          <Routes>\r\n            <Route path=\"/\" element={<ChallengeList />} />\r\n            <Route path=\"/challenge/01-static-task-display\" element={<TaskList />} />\r\n            <Route path=\"/challenge/02-dynamic-task-rendering\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm={false} countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/03-adding-new-tasks\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/04-task-completion-toggle\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"completed\" />} />\r\n            <Route path=\"/challenge/05-task-deletion\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" onDelete={handleDelete} />} />\r\n            <Route path=\"/challenge/06-task-filtering\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/07-priority-based-sorting\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/08-task-editing\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/09-search-functionality\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/10-useeffect-local-storage\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/11-useeffect-debounced-search\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/12-categories-and-tags\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/13-due-dates-and-sorting\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n            <Route path=\"/challenge/14-task-statistics-dashboard\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showStatsPanel />} />\r\n            <Route path=\"/challenge/15-component-organization\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/16-context-api-theme\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/17-custom-hook-uselocalstorage\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/18-usereducer-complex-state\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/19-performance-optimization\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/20-error-boundaries\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" />} />\r\n            <Route path=\"/challenge/21-react-router\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" linkToTaskDetail />} />\r\n            <Route path=\"/challenge/21-react-router/task/:id\" element={<TaskDetailPage />} />\r\n            <Route path=\"/challenge/22-data-fetching\" element={<FetchDemoView />} />\r\n            <Route path=\"/challenge/23-useref-focus-management\" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat=\"tasks\" showFilterBar />} />\r\n          </Routes>\r\n        </main>\r\n      </div>\r\n    </BrowserRouter>\r\n  )\r\n}\r\n\r\nfunction App() {\r\n  return (\r\n    <ThemeProvider>\r\n      <AppContent />\r\n    </ThemeProvider>\r\n  )\r\n}\r\n\r\nexport default App",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\TaskApp.tsx",
+          "messages": [
+            {
+              "ruleId": "react-hooks/exhaustive-deps",
+              "severity": 1,
+              "message": "React Hook useEffect has a missing dependency: 'debouncedSearch'. Either include it or remove the dependency array.",
+              "line": 41,
+              "column": 6,
+              "nodeType": "ArrayExpression",
+              "endLine": 41,
+              "endColumn": 14,
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [debouncedSearch, search]",
+                  "fix": {
+                    "range": [
+                      1775,
+                      1783
+                    ],
+                    "text": "[debouncedSearch, search]"
+                  }
+                }
+              ]
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 1,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import { useState, useEffect, useCallback, useMemo } from 'react'\r\nimport TaskForm from './TaskForm'\r\nimport TaskList from './TaskList'\r\nimport FilterBar from './FilterBar'\r\nimport StatsPanel from './StatsPanel'\r\nimport ThemeToggle from './ThemeToggle'\r\nimport type { Action, Task } from '../reducers/taskReducer'\r\nimport { addTask, updateTask, deleteTask, toggleTask } from '../reducers/taskReducer'\r\n\r\ntype Filter = 'all' | 'active' | 'completed'\r\ntype SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'\r\n\r\ninterface TaskAppProps {\r\n  tasks: Task[]\r\n  setTasks: React.Dispatch<React.SetStateAction<Task[]>>\r\n  dispatch?: React.Dispatch<Action>\r\n  showForm?: boolean\r\n  countFormat?: string\r\n  countText?: string\r\n  onDelete?: (id: number | string) => void\r\n  showFilterBar?: boolean\r\n  showStatsPanel?: boolean\r\n  linkToTaskDetail?: boolean\r\n}\r\n\r\nconst PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }\r\n\r\nexport default function TaskApp({ tasks, setTasks, dispatch, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {\r\n  const [filter, setFilter] = useState<Filter>('all')\r\n  const [sort, setSort] = useState<SortOrder>('recently-added')\r\n  const [editingId, setEditingId] = useState<number | string | null>(null)\r\n  const [search, setSearch] = useState('')\r\n  const [debouncedSearch, setDebouncedSearch] = useState('')\r\n  const [searching, setSearching] = useState(false)\r\n  const [selectedCategory, setSelectedCategory] = useState('')\r\n\r\n  useEffect(() => {\r\n    if (search !== debouncedSearch) setSearching(true)\r\n    const timeout = setTimeout(() => { setDebouncedSearch(search); setSearching(false) }, 300)\r\n    return () => clearTimeout(timeout)\r\n  }, [search])\r\n\r\n  const handleAddTask = useCallback((task: Task) => {\r\n    if (dispatch) { dispatch(addTask(task)) } else { setTasks(prev => [...prev, task]) }\r\n  }, [dispatch, setTasks])\r\n\r\n  const handleToggle = useCallback((id: number | string) => {\r\n    if (dispatch) { dispatch(toggleTask(id)) } else {\r\n      setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))\r\n    }\r\n  }, [dispatch, setTasks])\r\n\r\n  const handleDelete = useCallback((id: number | string) => {\r\n    if (onDelete) { onDelete(id) }\r\n    else if (dispatch) { dispatch(deleteTask(id)) }\r\n    else { setTasks(prev => prev.filter(t => t.id !== id)) }\r\n  }, [onDelete, dispatch, setTasks])\r\n\r\n  const handleUpdateTask = useCallback((id: number | string, updates: Partial<Task>) => {\r\n    if (dispatch) { dispatch(updateTask(id, updates)) } else {\r\n      setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))\r\n    }\r\n    setEditingId(null)\r\n  }, [dispatch, setTasks])\r\n\r\n  const categories = useMemo(\r\n    () => [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[],\r\n    [tasks]\r\n  )\r\n\r\n  const sortedTasks = useMemo(() => {\r\n    const filtered = tasks\r\n      .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })\r\n      .filter(t => !selectedCategory || t.category === selectedCategory)\r\n      .filter(t => {\r\n        if (!debouncedSearch.trim()) return true\r\n        const q = debouncedSearch.toLowerCase()\r\n        return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)\r\n      })\r\n\r\n    return [...filtered].sort((a, b) => {\r\n      if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)\r\n      if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)\r\n      if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())\r\n      if (sort === 'due-date') {\r\n        if (!a.dueDate && !b.dueDate) return 0\r\n        if (!a.dueDate) return 1\r\n        if (!b.dueDate) return -1\r\n        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()\r\n      }\r\n      return 0\r\n    })\r\n  }, [tasks, filter, selectedCategory, debouncedSearch, sort])\r\n\r\n  const computedCountText = useMemo(() => {\r\n    if (countText) return countText\r\n    if (countFormat === 'completed') return `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`\r\n    return `Showing ${sortedTasks.length} of ${tasks.length} tasks`\r\n  }, [countText, countFormat, tasks, sortedTasks.length])\r\n\r\n  const handleClearSearch = useCallback(() => { setSearch(''); setDebouncedSearch('') }, [])\r\n\r\n  return (\r\n    <div>\r\n      <ThemeToggle />\r\n      {showStatsPanel && <StatsPanel tasks={tasks} />}\r\n      {showFilterBar && (\r\n        <FilterBar\r\n          filter={filter} onFilterChange={setFilter}\r\n          sort={sort} onSortChange={setSort}\r\n          search={search} onSearchChange={setSearch}\r\n          onClearSearch={handleClearSearch}\r\n          categories={categories} selectedCategory={selectedCategory}\r\n          onCategoryChange={setSelectedCategory}\r\n        />\r\n      )}\r\n      {searching && <p id=\"searching-indicator\">Searching...</p>}\r\n      {showForm && <TaskForm onAddTask={handleAddTask} categories={categories} />}\r\n      <TaskList\r\n        tasks={sortedTasks}\r\n        onToggle={handleToggle}\r\n        onDelete={handleDelete}\r\n        onUpdateTask={handleUpdateTask}\r\n        editingId={editingId}\r\n        setEditingId={setEditingId}\r\n        countText={computedCountText}\r\n      />\r\n      {sortedTasks.length === 0 && !searching && (\r\n        <p id=\"filter-empty-message\">\r\n          {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}\r\n        </p>\r\n      )}\r\n    </div>\r\n  )\r\n}",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\TaskCard.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\TaskList.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        }
+      ]
+    },
+    "architectureResults": {
+      "score": 100,
+      "passed": true,
+      "patternsFound": [
+        "functionalComponent",
+        "React.memo",
+        "useCallback",
+        "useMemo"
+      ],
+      "patternsMissing": [],
+      "details": [
+        {
+          "file": "src/components/TaskCard.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "React.memo"
+          ],
+          "patternsMissing": [
+            "useCallback",
+            "useMemo"
+          ]
+        },
+        {
+          "file": "src/components/TaskList.tsx",
+          "patternsFound": [
+            "functionalComponent"
+          ],
+          "patternsMissing": [
+            "React.memo",
+            "useCallback",
+            "useMemo"
+          ]
+        },
+        {
+          "file": "src/components/TaskApp.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "useCallback",
+            "useMemo"
+          ],
+          "patternsMissing": [
+            "React.memo"
+          ]
+        },
+        {
+          "file": "src/App.tsx",
+          "patternsFound": [
+            "functionalComponent"
+          ],
+          "patternsMissing": [
+            "React.memo",
+            "useCallback",
+            "useMemo"
+          ]
+        }
+      ]
+    },
+    "bestPracticesResults": {
+      "score": 100,
+      "passed": true,
+      "issues": [],
+      "details": [],
+      "note": "No best practices requirements specified in challenge"
+    },
+    "e2eResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 1,
+      "passedTests": 1,
+      "failedTests": 0,
+      "details": [
+        {
+          "title": "challenge-19.spec.ts",
+          "file": "challenge-19.spec.ts",
+          "column": 0,
+          "line": 0,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Challenge 19: Performance Optimization - E2E",
+              "file": "challenge-19.spec.ts",
+              "line": 3,
+              "column": 6,
+              "specs": [
+                {
+                  "title": "should display task list",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1382,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-12T05:41:08.285Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "9d252b4519b361f881b0-9c8b6915a27106834fce",
+                  "file": "challenge-19.spec.ts",
+                  "line": 8,
+                  "column": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "screenshots": []
+    },
+    "aiReviewResults": {
+      "challengeId": "19-performance-optimization",
+      "timestamp": "2026-06-12T05:41:12.848Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    },
+    "aiResults": {
+      "challengeId": "19-performance-optimization",
+      "timestamp": "2026-06-12T05:41:12.848Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]

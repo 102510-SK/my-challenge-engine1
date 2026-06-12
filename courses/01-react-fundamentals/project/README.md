@@ -68,11 +68,11 @@ npm run review -- --challenge=01-static-task-display
 
 ## 📊 Progress Evidence
 
-*Auto-updated when you run review. Last run: 6/8/2026, 4:01:40 PM*
+*Auto-updated when you run review. Last run: 6/11/2026, 10:41:12 PM*
 
 | Metric | Value |
 |--------|-------|
-| Challenges completed | 16 / 23 (69.6%) |
+| Challenges completed | 18 / 23 (78.3%) |
 | Average score | 82.9% |
 
 | Challenge | Skills covered | Status |
@@ -94,8 +94,8 @@ npm run review -- --challenge=01-static-task-display
 | Component Organization with Props | Component extraction, Props interface design, Single Responsibility, Reusability, Props destructuring | Passed |
 | Context API - Theme Management | React Context, createContext, Provider, useContext, Global state, Custom hook | Passed |
 | Custom Hook - useLocalStorage | Custom hooks, Hook composition, Reusable logic, localStorage abstraction | Passed |
-| useReducer - Complex State Management | useReducer, Reducer functions, Action objects, Dispatch pattern, Complex state logic | — |
-| Performance Optimization | React.memo, useCallback, useMemo, Re-render optimization | — |
+| useReducer - Complex State Management | useReducer, Reducer functions, Action objects, Dispatch pattern, Complex state logic | Passed |
+| Performance Optimization | React.memo, useCallback, useMemo, Re-render optimization | Passed |
 | Error Boundaries and Error Handling | Error boundaries, Class component, Error handling, Fallback UI, try-catch | — |
 | React Router - Routing and Navigation | React Router, Route, Link, useNavigate, useParams, URL-driven UI, Dynamic segments | — |
 | Data Fetching - Loading and Error State | fetch, useEffect, Loading state, Error state, Async data, Conditional rendering | — |

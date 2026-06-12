@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2026-06-08T23:01:40.775Z",
+  "lastUpdated": "2026-06-12T05:41:13.046Z",
   "pathway": {
     "name": "Modern React Engineer",
     "version": "1.0.0",
     "overallScore": 27.4,
-    "completionPercentage": 30.2,
+    "completionPercentage": 34,
     "badgeLevel": "none",
     "totalChallenges": 53,
-    "completedChallenges": 16
+    "completedChallenges": 18
   },
   "courses": {
     "01-react-fundamentals": {
       "courseId": "01-react-fundamentals",
       "courseName": "React Fundamentals",
       "averageScore": 82.9,
-      "completionPercentage": 69.6,
-      "badgeLevel": "bronze",
+      "completionPercentage": 78.3,
+      "badgeLevel": "silver",
       "totalChallenges": 23,
-      "completedChallenges": 16,
+      "completedChallenges": 18,
       "challenges": {
         "01-static-task-display": {
           "challengeId": "01-static-task-display",
@@ -268,6 +268,36 @@
           "scores": {
             "functionalTests": 100,
             "codeQuality": 96,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 0
+          }
+        },
+        "18-usereducer-complex-state": {
+          "challengeId": "18-usereducer-complex-state",
+          "challengeName": "useReducer - Complex State Management",
+          "passed": true,
+          "score": 83.2,
+          "lastRun": "2026-06-12T05:33:17.495Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 88,
+            "architecture": 100,
+            "bestPractices": 100,
+            "e2eTests": 100,
+            "aiReview": 0
+          }
+        },
+        "19-performance-optimization": {
+          "challengeId": "19-performance-optimization",
+          "challengeName": "Performance Optimization",
+          "passed": true,
+          "score": 83.2,
+          "lastRun": "2026-06-12T05:40:40.586Z",
+          "scores": {
+            "functionalTests": 100,
+            "codeQuality": 88,
             "architecture": 100,
             "bestPractices": 100,
             "e2eTests": 100,

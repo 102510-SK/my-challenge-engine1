@@ -277,5 +277,37 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "18-usereducer-complex-state",
+    "challengeName": "useReducer - Complex State Management",
+    "aiReview": {
+      "challengeId": "18-usereducer-complex-state",
+      "timestamp": "2026-06-12T05:33:53.896Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
+  },
+  {
+    "challengeId": "19-performance-optimization",
+    "challengeName": "Performance Optimization",
+    "aiReview": {
+      "challengeId": "19-performance-optimization",
+      "timestamp": "2026-06-12T05:41:12.848Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]
