@@ -1,11 +1,11 @@
 {
   "courseId": "01-react-fundamentals",
   "courseName": "React Fundamentals",
-  "lastUpdated": "2026-06-29T22:03:57.198Z",
+  "lastUpdated": "2026-06-29T22:13:13.158Z",
   "totalChallenges": 23,
-  "completedChallenges": 21,
-  "averageScore": 83.2,
-  "completionPercentage": 91.3,
+  "completedChallenges": 22,
+  "averageScore": 83.3,
+  "completionPercentage": 95.7,
   "badgeLevel": "silver",
   "challengeResults": [
     {
@@ -139,6 +139,12 @@
       "challengeName": "Data Fetching - Loading and Error State",
       "score": 85,
       "passed": true
+    },
+    {
+      "challengeId": "23-useref-focus-management",
+      "challengeName": "useRef - Focus Management",
+      "score": 84.7,
+      "passed": true
     }
   ],
   "skillStrengths": [
@@ -162,7 +168,8 @@
     "Performance Optimization",
     "Error Boundaries and Error Handling",
     "React Router - Routing and Navigation",
-    "Data Fetching - Loading and Error State"
+    "Data Fetching - Loading and Error State",
+    "useRef - Focus Management"
   ],
   "improvementAreas": [
     "Dynamic Task Rendering"

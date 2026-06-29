@@ -7954,5 +7954,356 @@
       "overall": "",
       "error": "GROQ_API_KEY environment variable not set. AI review skipped."
     }
+  },
+  {
+    "challengeId": "23-useref-focus-management",
+    "challengeName": "useRef - Focus Management",
+    "timestamp": "2026-06-29T22:12:49.779Z",
+    "scores": {
+      "functionalTests": 100,
+      "codeQuality": 98,
+      "architecture": 100,
+      "bestPractices": 100,
+      "e2eTests": 100,
+      "aiReview": 0
+    },
+    "totalScore": 84.7,
+    "passed": true,
+    "errors": [],
+    "warnings": [],
+    "testResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 2,
+      "passedTests": 2,
+      "failedTests": 0,
+      "details": [
+        {
+          "assertionResults": [
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 23: useRef - Focus Management"
+              ],
+              "fullName": " Challenge 23: useRef - Focus Management FilterBar should render search input with id search-input",
+              "status": "passed",
+              "title": "FilterBar should render search input with id search-input",
+              "duration": 38,
+              "failureMessages": []
+            },
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 23: useRef - Focus Management"
+              ],
+              "fullName": " Challenge 23: useRef - Focus Management FilterBar should be focusable for search input",
+              "status": "passed",
+              "title": "FilterBar should be focusable for search input",
+              "duration": 7,
+              "failureMessages": []
+            }
+          ],
+          "startTime": 1782771175103,
+          "endTime": 1782771175148,
+          "status": "passed",
+          "message": "",
+          "name": "C:/Users/HP/OneDrive/Documents/challenge-engine-react/courses/01-react-fundamentals/project/tests/challenge-23.test.tsx"
+        }
+      ]
+    },
+    "lintResults": {
+      "score": 98,
+      "passed": true,
+      "totalIssues": 1,
+      "errors": 0,
+      "warnings": 1,
+      "details": [
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\App.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\FilterBar.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "C:\\Users\\HP\\OneDrive\\Documents\\challenge-engine-react\\courses\\01-react-fundamentals\\project\\src\\components\\TaskApp.tsx",
+          "messages": [
+            {
+              "ruleId": "react-hooks/exhaustive-deps",
+              "severity": 1,
+              "message": "React Hook useEffect has a missing dependency: 'debouncedSearch'. Either include it or remove the dependency array.",
+              "line": 42,
+              "column": 6,
+              "nodeType": "ArrayExpression",
+              "endLine": 42,
+              "endColumn": 14,
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [debouncedSearch, search]",
+                  "fix": {
+                    "range": [
+                      1838,
+                      1846
+                    ],
+                    "text": "[debouncedSearch, search]"
+                  }
+                }
+              ]
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 1,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import { useState, useEffect, useCallback, useMemo } from 'react'\r\nimport TaskForm from './TaskForm'\r\nimport TaskList from './TaskList'\r\nimport FilterBar from './FilterBar'\r\nimport StatsPanel from './StatsPanel'\r\nimport ThemeToggle from './ThemeToggle'\r\nimport ErrorBoundary from './ErrorBoundary'\r\nimport type { Action, Task } from '../reducers/taskReducer'\r\nimport { addTask, updateTask, deleteTask, toggleTask } from '../reducers/taskReducer'\r\n\r\ntype Filter = 'all' | 'active' | 'completed'\r\ntype SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'\r\n\r\ninterface TaskAppProps {\r\n  tasks: Task[]\r\n  setTasks: React.Dispatch<React.SetStateAction<Task[]>>\r\n  dispatch?: React.Dispatch<Action>\r\n  showForm?: boolean\r\n  countFormat?: string\r\n  countText?: string\r\n  onDelete?: (id: number | string) => void\r\n  showFilterBar?: boolean\r\n  showStatsPanel?: boolean\r\n  linkToTaskDetail?: boolean\r\n}\r\n\r\nconst PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }\r\n\r\nexport default function TaskApp({ tasks, setTasks, dispatch, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel, linkToTaskDetail }: TaskAppProps) {\r\n  const [filter, setFilter] = useState<Filter>('all')\r\n  const [sort, setSort] = useState<SortOrder>('recently-added')\r\n  const [editingId, setEditingId] = useState<number | string | null>(null)\r\n  const [search, setSearch] = useState('')\r\n  const [debouncedSearch, setDebouncedSearch] = useState('')\r\n  const [searching, setSearching] = useState(false)\r\n  const [selectedCategory, setSelectedCategory] = useState('')\r\n\r\n  useEffect(() => {\r\n    if (search !== debouncedSearch) setSearching(true)\r\n    const timeout = setTimeout(() => { setDebouncedSearch(search); setSearching(false) }, 300)\r\n    return () => clearTimeout(timeout)\r\n  }, [search])\r\n\r\n  const handleAddTask = useCallback((task: Task) => {\r\n    if (dispatch) { dispatch(addTask(task)) } else { setTasks(prev => [...prev, task]) }\r\n  }, [dispatch, setTasks])\r\n\r\n  const handleToggle = useCallback((id: number | string) => {\r\n    if (dispatch) { dispatch(toggleTask(id)) } else {\r\n      setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))\r\n    }\r\n  }, [dispatch, setTasks])\r\n\r\n  const handleDelete = useCallback((id: number | string) => {\r\n    if (onDelete) { onDelete(id) }\r\n    else if (dispatch) { dispatch(deleteTask(id)) }\r\n    else { setTasks(prev => prev.filter(t => t.id !== id)) }\r\n  }, [onDelete, dispatch, setTasks])\r\n\r\n  const handleUpdateTask = useCallback((id: number | string, updates: Partial<Task>) => {\r\n    if (dispatch) { dispatch(updateTask(id, updates)) } else {\r\n      setTasks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))\r\n    }\r\n    setEditingId(null)\r\n  }, [dispatch, setTasks])\r\n\r\n  const categories = useMemo(\r\n    () => [...new Set(tasks.map(t => t.category).filter(Boolean))] as string[],\r\n    [tasks]\r\n  )\r\n\r\n  const sortedTasks = useMemo(() => {\r\n    const filtered = tasks\r\n      .filter(t => { if (filter === 'active') return !t.completed; if (filter === 'completed') return t.completed; return true })\r\n      .filter(t => !selectedCategory || t.category === selectedCategory)\r\n      .filter(t => {\r\n        if (!debouncedSearch.trim()) return true\r\n        const q = debouncedSearch.toLowerCase()\r\n        return t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)\r\n      })\r\n\r\n    return [...filtered].sort((a, b) => {\r\n      if (sort === 'priority-high-low') return (PRIORITY_RANK[b.priority] ?? 0) - (PRIORITY_RANK[a.priority] ?? 0)\r\n      if (sort === 'priority-low-high') return (PRIORITY_RANK[a.priority] ?? 0) - (PRIORITY_RANK[b.priority] ?? 0)\r\n      if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase())\r\n      if (sort === 'due-date') {\r\n        if (!a.dueDate && !b.dueDate) return 0\r\n        if (!a.dueDate) return 1\r\n        if (!b.dueDate) return -1\r\n        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()\r\n      }\r\n      return 0\r\n    })\r\n  }, [tasks, filter, selectedCategory, debouncedSearch, sort])\r\n\r\n  const computedCountText = useMemo(() => {\r\n    if (countText) return countText\r\n    if (countFormat === 'completed') return `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`\r\n    return `Showing ${sortedTasks.length} of ${tasks.length} tasks`\r\n  }, [countText, countFormat, tasks, sortedTasks.length])\r\n\r\n  const handleClearSearch = useCallback(() => { setSearch(''); setDebouncedSearch('') }, [])\r\n\r\n  return (\r\n    <div>\r\n      <ThemeToggle />\r\n      {showStatsPanel && <StatsPanel tasks={tasks} />}\r\n      {showFilterBar && (\r\n        <FilterBar\r\n          filter={filter} onFilterChange={setFilter}\r\n          sort={sort} onSortChange={setSort}\r\n          search={search} onSearchChange={setSearch}\r\n          onClearSearch={handleClearSearch}\r\n          categories={categories} selectedCategory={selectedCategory}\r\n          onCategoryChange={setSelectedCategory}\r\n        />\r\n      )}\r\n      {searching && <p id=\"searching-indicator\">Searching...</p>}\r\n      {showForm && <TaskForm onAddTask={handleAddTask} categories={categories} />}\r\n      <ErrorBoundary>\r\n        <TaskList\r\n          tasks={sortedTasks}\r\n          onToggle={handleToggle}\r\n          onDelete={handleDelete}\r\n          onUpdateTask={handleUpdateTask}\r\n          editingId={editingId}\r\n          setEditingId={setEditingId}\r\n          countText={computedCountText}\r\n          linkToTaskDetail={linkToTaskDetail}\r\n        />\r\n      </ErrorBoundary>\r\n      {sortedTasks.length === 0 && !searching && (\r\n        <p id=\"filter-empty-message\">\r\n          {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}\r\n        </p>\r\n      )}\r\n    </div>\r\n  )\r\n}",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        }
+      ]
+    },
+    "architectureResults": {
+      "score": 100,
+      "passed": true,
+      "patternsFound": [
+        "functionalComponent",
+        "props",
+        "useRef"
+      ],
+      "patternsMissing": [],
+      "details": [
+        {
+          "file": "src/components/FilterBar.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "props",
+            "useRef"
+          ],
+          "patternsMissing": []
+        },
+        {
+          "file": "src/components/TaskApp.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "props"
+          ],
+          "patternsMissing": [
+            "useRef"
+          ]
+        },
+        {
+          "file": "src/App.tsx",
+          "patternsFound": [
+            "functionalComponent"
+          ],
+          "patternsMissing": [
+            "props",
+            "useRef"
+          ]
+        }
+      ]
+    },
+    "bestPracticesResults": {
+      "score": 100,
+      "passed": true,
+      "issues": [],
+      "details": [],
+      "note": "No best practices requirements specified in challenge"
+    },
+    "e2eResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 3,
+      "passedTests": 3,
+      "failedTests": 0,
+      "details": [
+        {
+          "title": "challenge-23.spec.ts",
+          "file": "challenge-23.spec.ts",
+          "column": 0,
+          "line": 0,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Challenge 23: useRef - Focus Management - E2E",
+              "file": "challenge-23.spec.ts",
+              "line": 3,
+              "column": 6,
+              "specs": [
+                {
+                  "title": "should display task list",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 898,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-29T22:13:10.015Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "a7b5313722e1686b4d4f-dcb101d3a94b1b8146ea",
+                  "file": "challenge-23.spec.ts",
+                  "line": 8,
+                  "column": 3
+                },
+                {
+                  "title": "should display filter bar with search input",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 598,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-29T22:13:11.281Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "a7b5313722e1686b4d4f-f646e519e463d837ae26",
+                  "file": "challenge-23.spec.ts",
+                  "line": 12,
+                  "column": 3
+                },
+                {
+                  "title": "search input should exist and be visible",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 571,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-29T22:13:11.922Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "a7b5313722e1686b4d4f-c9ca256cafd0528cd2b6",
+                  "file": "challenge-23.spec.ts",
+                  "line": 16,
+                  "column": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "screenshots": []
+    },
+    "aiReviewResults": {
+      "challengeId": "23-useref-focus-management",
+      "timestamp": "2026-06-29T22:13:13.153Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    },
+    "aiResults": {
+      "challengeId": "23-useref-focus-management",
+      "timestamp": "2026-06-29T22:13:13.153Z",
+      "score": 0,
+      "feedback": [],
+      "strengths": [],
+      "improvements": [],
+      "readability": 0,
+      "maintainability": 0,
+      "overall": "",
+      "error": "GROQ_API_KEY environment variable not set. AI review skipped."
+    }
   }
 ]

@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'react'
+
 type Filter = 'all' | 'active' | 'completed'
 type SortOrder = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date'
 
@@ -19,8 +21,14 @@ export default function FilterBar({
   search, onSearchChange, onClearSearch,
   categories, selectedCategory, onCategoryChange
 }: FilterBarProps) {
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    searchInputRef.current?.focus()
+  }, [])
+
   return (
-    <div id="filter-bar">
+    <div>
       <button data-active={filter === 'all'} onClick={() => onFilterChange?.('all')}>All</button>
       <button data-active={filter === 'active'} onClick={() => onFilterChange?.('active')}>Active</button>
       <button data-active={filter === 'completed'} onClick={() => onFilterChange?.('completed')}>Completed</button>
@@ -41,6 +49,8 @@ export default function FilterBar({
       )}
       {onSearchChange && (
         <input
+          ref={searchInputRef}
+          id="search-input"
           aria-label="search-input"
           data-testid="search-input"
           type="text"
