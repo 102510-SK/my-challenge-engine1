@@ -26,7 +26,7 @@ interface TaskAppProps {
 
 const PRIORITY_RANK: Record<string, number> = { High: 3, Medium: 2, Low: 1 }
 
-export default function TaskApp({ tasks, setTasks, dispatch, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel }: TaskAppProps) {
+export default function TaskApp({ tasks, setTasks, dispatch, showForm, countFormat, countText, onDelete, showFilterBar, showStatsPanel, linkToTaskDetail }: TaskAppProps) {
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<SortOrder>('recently-added')
   const [editingId, setEditingId] = useState<number | string | null>(null)
@@ -126,6 +126,7 @@ export default function TaskApp({ tasks, setTasks, dispatch, showForm, countForm
           editingId={editingId}
           setEditingId={setEditingId}
           countText={computedCountText}
+          linkToTaskDetail={linkToTaskDetail}
         />
       </ErrorBoundary>
       {sortedTasks.length === 0 && !searching && (

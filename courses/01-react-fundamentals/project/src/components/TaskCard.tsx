@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Button from './Button'
 import Badge from './Badge'
 import StatusIndicator from './StatusIndicator'
@@ -12,6 +13,7 @@ interface TaskCardProps {
   category?: string
   tags?: string[]
   dueDate?: string
+  linkToTaskDetail?: boolean
   onToggle?: () => void
   onDelete?: (id: number | string) => void
   onUpdateTask?: (id: number | string, updates: {
@@ -35,7 +37,7 @@ function getDueDateStatus(dueDate: string, completed: boolean): 'overdue' | 'due
 
 function TaskCard({
   id, title, description, priority, completed, category, tags, dueDate,
-  onToggle, onDelete, onUpdateTask, isEditing, onEditStart, onEditCancel
+  linkToTaskDetail, onToggle, onDelete, onUpdateTask, isEditing, onEditStart, onEditCancel
 }: TaskCardProps) {
   const [editTitle, setEditTitle] = useState(title)
   const [editDescription, setEditDescription] = useState(description)
@@ -98,7 +100,11 @@ function TaskCard({
     <article id="task-card" data-completed={completed ? 'true' : 'false'} data-overdue={isOverdue ? 'true' : 'false'}
       style={{ background: completed ? '#f0f0f0' : isOverdue ? '#fff0f0' : '#fff' }}>
       {onToggle && <input type="checkbox" checked={completed ?? false} onChange={onToggle} />}
-      <h2 style={{ textDecoration: completed ? 'line-through' : 'none' }}>{title}</h2>
+      <h2 style={{ textDecoration: completed ? 'line-through' : 'none' }}>
+        {linkToTaskDetail && id !== undefined
+          ? <Link to={`/challenge/21-react-router/task/${id}`}>{title}</Link>
+          : title}
+      </h2>
       <p style={{ textDecoration: completed ? 'line-through' : 'none' }}>{description}</p>
       <Badge variant="priority">Priority: {priority}</Badge>
       {category && <Badge variant="category"><span id="task-category">{category}</span></Badge>}

@@ -20,9 +20,10 @@ interface TaskListProps {
   setEditingId?: React.Dispatch<React.SetStateAction<number | string | null>>
   countFormat?: string
   countText?: string
+  linkToTaskDetail?: boolean
 }
 
-export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, editingId, setEditingId, countFormat, countText }: TaskListProps) {
+export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, editingId, setEditingId, countFormat, countText, linkToTaskDetail }: TaskListProps) {
   if (!tasks) {
     return (
       <section id="task-list">
@@ -54,6 +55,7 @@ export default function TaskList({ tasks, onToggle, onDelete, onUpdateTask, edit
           category={task.category}
           tags={task.tags}
           dueDate={task.dueDate}
+          linkToTaskDetail={linkToTaskDetail}
           onToggle={onToggle ? () => onToggle(task.id) : undefined}
           onDelete={onDelete}
           onUpdateTask={onUpdateTask}
