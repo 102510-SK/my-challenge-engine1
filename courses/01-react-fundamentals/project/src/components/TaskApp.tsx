@@ -96,6 +96,7 @@ export default function TaskApp({ tasks, setTasks, dispatch, showForm, countForm
   const computedCountText = useMemo(() => {
     if (countText) return countText
     if (countFormat === 'completed') return `${tasks.filter(t => t.completed).length} of ${tasks.length} completed`
+    if (countFormat === 'tasks') return `${sortedTasks.length} Tasks`
     return `Showing ${sortedTasks.length} of ${tasks.length} tasks`
   }, [countText, countFormat, tasks, sortedTasks.length])
 
