@@ -38,15 +38,12 @@ function AppContent() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
   }, [tasks])
 
-  const setTasksFromStorage = (t: Task[]) => dispatch(setTasks(t))
-
   const handleDelete = (id: string | number) => {
     if (window.confirm('Are you sure?')) {
       dispatch({ type: 'DELETE_TASK', payload: id })
     }
   }
 
-  // setTasks shim so TaskApp can still call setTasks(fn) or setTasks(arr)
   const setTasksShim: React.Dispatch<React.SetStateAction<Task[]>> = (value) => {
     if (typeof value === 'function') {
       dispatch(setTasks(value(tasks)))
@@ -58,7 +55,7 @@ function AppContent() {
   return (
     <BrowserRouter>
       <div className="App">
-        <main>
+        <div id="main-content">
           <Routes>
             <Route path="/" element={<ChallengeList />} />
             <Route path="/challenge/01-static-task-display" element={<TaskList />} />
@@ -86,7 +83,7 @@ function AppContent() {
             <Route path="/challenge/22-data-fetching" element={<FetchDemoView />} />
             <Route path="/challenge/23-useref-focus-management" element={<TaskApp tasks={tasks} setTasks={setTasksShim} dispatch={dispatch} showForm countFormat="tasks" showFilterBar />} />
           </Routes>
-        </main>
+        </div>
       </div>
     </BrowserRouter>
   )

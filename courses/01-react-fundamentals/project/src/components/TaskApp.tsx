@@ -4,6 +4,7 @@ import TaskList from './TaskList'
 import FilterBar from './FilterBar'
 import StatsPanel from './StatsPanel'
 import ThemeToggle from './ThemeToggle'
+import ErrorBoundary from './ErrorBoundary'
 import type { Action, Task } from '../reducers/taskReducer'
 import { addTask, updateTask, deleteTask, toggleTask } from '../reducers/taskReducer'
 
@@ -116,15 +117,17 @@ export default function TaskApp({ tasks, setTasks, dispatch, showForm, countForm
       )}
       {searching && <p id="searching-indicator">Searching...</p>}
       {showForm && <TaskForm onAddTask={handleAddTask} categories={categories} />}
-      <TaskList
-        tasks={sortedTasks}
-        onToggle={handleToggle}
-        onDelete={handleDelete}
-        onUpdateTask={handleUpdateTask}
-        editingId={editingId}
-        setEditingId={setEditingId}
-        countText={computedCountText}
-      />
+      <ErrorBoundary>
+        <TaskList
+          tasks={sortedTasks}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+          onUpdateTask={handleUpdateTask}
+          editingId={editingId}
+          setEditingId={setEditingId}
+          countText={computedCountText}
+        />
+      </ErrorBoundary>
       {sortedTasks.length === 0 && !searching && (
         <p id="filter-empty-message">
           {search ? `No tasks found for '${search}'` : 'No tasks match this filter'}
